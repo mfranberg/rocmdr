@@ -59,8 +59,6 @@ Above we have described to generate a summary predictor for a single SNP and a s
 \subsection{Time complexity}
 I expect that a naive implementation will roughly have the time complexity $\mathcal{O}(m \cdot (2^k\cdot \log{2^k} + n))$. Since $m$ is fixed to around $200 000$, and $n$ is relatively small. It seems reasonable to run the algorithm as long $2^k$ is in the same order of magnitude as $n$, and the CMV step is similarly intensive.
 
-\subsection{Notes}
-Optimizing predictors with regards to $\frac{y_i}{x_i}$ is equivalent to the NP-complete problem of 0-1 programming.
 \section{More ideas}
 \begin{itemize}
   \item It might be an idea to use BIC instead of CMV but that will require a probabilistic model in order to calculate the likelihood term.
