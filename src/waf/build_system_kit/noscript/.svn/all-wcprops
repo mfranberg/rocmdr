@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript
+END
+foo.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/foo.c
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/main.c
+END
+bar.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/bar.c
+END
+dbdlib.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/dbdlib.py
+END
+create_it.sh
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/create_it.sh
+END
+foo.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/foo.h
+END
+bar.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/bar.h
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/10732/trunk/build_system_kit/noscript/README.txt
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/10732/trunk/build_system_kit/parser
+END
+cbit
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/10732/trunk/build_system_kit/parser/cbit
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/10732/trunk/build_system_kit/parser/main.c
+END
+cbdlib.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/10732/trunk/build_system_kit/parser/cbdlib.py
+END
+create_it.sh
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/10732/trunk/build_system_kit/parser/create_it.sh
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/10732/trunk/build_system_kit/parser/README.txt
+END

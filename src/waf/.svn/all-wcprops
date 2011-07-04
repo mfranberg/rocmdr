@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 25
+/svn/!svn/ver/11448/trunk
+END
+DEVEL
+K 25
+svn:wc:ra_dav:version-url
+V 31
+/svn/!svn/ver/10920/trunk/DEVEL
+END
+configure
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/8765/trunk/configure
+END
+waf-light
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/11427/trunk/waf-light
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 30
+/svn/!svn/ver/11444/trunk/TODO
+END
+.gitignore
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/10249/trunk/.gitignore
+END
+ChangeLog
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/11444/trunk/ChangeLog
+END
+wscript
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/11427/trunk/wscript
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/10520/trunk/README
+END

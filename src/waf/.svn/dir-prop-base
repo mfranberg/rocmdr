@@ -1,0 +1,16 @@
+K 9
+svk:merge
+V 41
+26c20426-19fb-431c-bb94-eef8366bc2c1:/:48
+K 10
+svn:ignore
+V 19
+.waf-*
+waf
+waf.bat
+
+K 13
+svn:mergeinfo
+V 16
+/trunk:6493-6826
+END

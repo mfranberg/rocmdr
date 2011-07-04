@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate
+END
+a.c
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/a.c
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/main.c
+END
+a.h
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/a.h
+END
+create_it.sh
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/create_it.sh
+END
+ebdlib.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/ebdlib.py
+END
+README.txt
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/README.txt
+END
+wscript
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/10732/trunk/build_system_kit/nostate/wscript
+END

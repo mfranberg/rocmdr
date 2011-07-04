@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/10611/trunk/tests/different_top
+END
+wscript
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/10611/trunk/tests/different_top/wscript
+END

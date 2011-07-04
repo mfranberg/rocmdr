@@ -1,0 +1,4 @@
+To build everything:
+./waf/waf configure build
+
+The binaries will end up in the 'build' directory.
