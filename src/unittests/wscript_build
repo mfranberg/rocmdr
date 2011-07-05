@@ -1,0 +1,23 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# Thomas Nagy, 2006-2010 (ita)
+import os.path
+
+# Generate tests
+test_files = ctx.path.ant_glob("*.h")
+generated_test_files = list()
+for test_file in test_files:
+    test_file_base, test_file_extension = os.path.splitext(test_file.name)
+    generated_test_file_name = test_file_base + '_test.cpp'
+    bld(
+        rule='${PERL} ${CXXTESTGEN} --error-printer -o ${TGT} ${SRC}',
+        target=generated_test_file_name,
+        source=test_file)
+    generated_test_files.append(generated_test_file_name)
+
+# Compile tests
+for generated_test_file in generated_test_files:
+    bld.program(source=generated_test_file,
+                target=generated_test_file.replace(".cpp",""),
+                use='rocmdrlib cxxtest',
+                includes='.')

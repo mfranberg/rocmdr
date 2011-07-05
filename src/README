@@ -2,3 +2,6 @@ To build everything:
 ./waf/waf configure build
 
 The binaries will end up in the 'build' directory.
+
+To build tests:
+./waf/waf build tests

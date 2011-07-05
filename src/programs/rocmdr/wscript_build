@@ -1,0 +1,13 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# Mattias Frånberg, 2011
+# 
+# Root configuration file for the waf build system.
+#
+
+##
+# Build the rocmdr program.
+#
+bld.program(source='rocmdr.cpp',
+            target='rocmdr',
+            use='rocmdrlib')
