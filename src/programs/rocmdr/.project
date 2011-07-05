@@ -3,13 +3,9 @@
 	<name>rocmdr</name>
 	<comment></comment>
 	<projects>
+		<project>rocmdrlib</project>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>net.sf.webcat.eclipse.cxxtest.cxxtestbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
 			<triggers>clean,full,incremental,</triggers>
@@ -36,7 +32,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/rocmdr/build}</value>
+					<value>${workspace_loc:/rocmdr/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
@@ -80,21 +76,9 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>net.sf.webcat.eclipse.cxxtest.cxxtestNature</nature>
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<filteredResources>
-		<filter>
-			<id>1309858322437</id>
-			<name></name>
-			<type>10</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-build</arguments>
-			</matcher>
-		</filter>
-	</filteredResources>
 </projectDescription>

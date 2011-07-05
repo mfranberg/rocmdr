@@ -1,6 +1,7 @@
 *~
 *.swp
 *.lock-wafbuild
+*Debug/
 docs/*/*.aux
 docs/*/*.dvi
 docs/*/*.log
