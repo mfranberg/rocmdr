@@ -18,6 +18,8 @@
  *
  * It does this by transforming each row into a
  * binary string.
+ *
+ * TODO: Maybe this should be a ColumnTransformer instead.
  */
 class ColumnHasher
 {
