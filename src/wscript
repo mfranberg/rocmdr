@@ -16,7 +16,7 @@ out = 'build'
 
 def options(opt):
 	opt.load('compiler_cxx')
-	opt.add_option('--test', default="-t", dest='test', type='string')
+	opt.add_option('--test', default="all", dest='test', type='string')
 
 ##
 # Configures global options, and sets up the following environment variables:
@@ -50,15 +50,24 @@ def build(bld):
         bld.recurse("unittests")
         Options.commands.remove("tests")
 
+def test(ctx):
+    ctx.recurse("unittests")
+
 ##
 # Run tests
 #
 def run_tests(ctx):
-    ctx.recurse("unittests")
+    from waflib import Options
+
+    command_list = ["build", "tests", "test"]
+    Options.commands = command_list + Options.commands
 
 from waflib.Build import BuildContext
 class RunTestCommand(BuildContext):
     cmd = 'run_tests'
     fun = 'run_tests'
 
-
+from waflib.Build import BuildContext
+class TestCommand(BuildContext):
+    cmd = 'test'
+    fun = 'test'

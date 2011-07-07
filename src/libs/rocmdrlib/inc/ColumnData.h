@@ -9,6 +9,7 @@
 #define COLUMNDATA_H_
 
 #include <exception>
+#include <stdexcept>
 #include <vector>
 
 /**
@@ -60,7 +61,7 @@ public:
 	 * @param columnIndex The 0-based index of the column.
 	 * @return The vector representing the column.
 	 */
-	std::vector<T> getColumn(unsigned int columnIndex);
+	const std::vector<T> & getColumn(unsigned int columnIndex);
 
 	/**
 	 * Retrieves a subset of the columns and forms a new
@@ -127,7 +128,7 @@ ColumnData<T>::addColumnFirst(const std::vector<T> column)
 }
 
 template <class T>
-std::vector<T>
+const std::vector<T> &
 ColumnData<T>::getColumn(unsigned int columnIndex)
 {
 	if( columnIndex >= size( ) )
