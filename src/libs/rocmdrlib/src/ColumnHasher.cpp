@@ -51,6 +51,6 @@ unsigned int
 ColumnHasher::numBitsForColumn(const std::vector<unsigned int> &column)
 {
 	unsigned int max = *std::max_element( column.begin( ), column.end( ) );
-	return ceilf( log2f( (float) max ) );
+	return ceilf( log2f( (float) max ) ) + 1;
 
 }
