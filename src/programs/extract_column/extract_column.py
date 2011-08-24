@@ -5,6 +5,7 @@
 # * Rows are separated by new lines.
 # * Column values are separated by whitespace.
 #
+import csv
 import sys
 import os.path
 
@@ -80,17 +81,6 @@ class ColumnConfig:
         return self.columns_to_extract
 
 ##
-# Reads a list of column names from the given
-# column file and returns them.
-#
-# @param column_file The file that contains the columns.
-#
-def read_column_list(column_file):
-    column_file.seek(0)
-    column_line = column_file.readline()
-    return column_line.split()
-
-##
 # Returns the a list of indices of columns with the given names.
 #
 # @param columns_to_extract Name of the columns to be searched for.
@@ -98,10 +88,11 @@ def read_column_list(column_file):
 # @return The list of indices of the columns that are going to be extracted.
 #
 def find_column_indices(columns_to_extract, column_list):
+    lowered_columns_to_extract = list(map(str.lower, columns_to_extract))
     lowered_column_list = list(map(str.lower, column_list))
 
     indices = []
-    for name in columns_to_extract:
+    for name in lowered_columns_to_extract:
         index = lowered_column_list.index(name)
         if index != -1:
             indices.append(index)
@@ -116,12 +107,12 @@ def find_column_indices(columns_to_extract, column_list):
 # @param column_file The file object that contains the column data.
 #
 def extract_columns(column_config, column_file):
-    column_list = read_column_list(column_file)
+    csv_reader = csv.reader(column_file, delimiter = '\t')
+    column_list = next(csv_reader)
     column_indices = find_column_indices(column_config.get_columns_to_extract(), column_list)
 
     extracted_columns = []
-    for line in column_file.readlines():
-        row = line.split()
+    for row in csv_reader:
         restricted_row = [column_config.reformat_column_value(row[i]) for i in column_indices]
         extracted_columns.append(restricted_row)
 
