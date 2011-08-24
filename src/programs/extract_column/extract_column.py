@@ -5,6 +5,7 @@
 # * Rows are separated by new lines.
 # * Column values are separated by whitespace.
 #
+import argparse
 import csv
 import sys
 import os.path
@@ -26,11 +27,7 @@ class ColumnConfigFactory:
     #
     def create_from_config(self, config_file):
         config_parser = configparser.RawConfigParser(allow_no_value=True)
-        parsed_files = config_parser.read([config_file])
-        if len(parsed_files) != 1:
-            print("Warning: Config could not be read.")
-            return ColumnConfig([])
-
+        config_parser.readfp(config_file)
         columns_to_extract = config_parser.options(self.COLUMN_LIST)
 
         return ColumnConfig(columns_to_extract)
@@ -93,9 +90,11 @@ def find_column_indices(columns_to_extract, column_list):
 
     indices = []
     for name in lowered_columns_to_extract:
-        index = lowered_column_list.index(name)
-        if index != -1:
+        try:
+            index = lowered_column_list.index(name)
             indices.append(index)
+        except ValueError:
+            print("No column '{0}' in input file.".format(name))
     
     return indices
 
@@ -118,33 +117,36 @@ def extract_columns(column_config, column_file):
 
     return extracted_columns
 
-
+##
+# Prints the extracted columns to stdout, beginning with
+# a line containing just the column names.
+#
+# @param column_names Names of the columns.
+# @param extracted A list of rows, where each row is a list of
+#                  the column values.
+#
 def print_columns(column_names, extracted_columns):
     print("\t".join(column_names))
     for row in extracted_columns:
         print("\t".join(row))
 
 ##
+# Parses the command line arguments and returns them.
+#
+def parse_arguments():
+    argument_parser = argparse.ArgumentParser(description="Extract a subset of the columns in a tab delimited data file.")
+    argument_parser.add_argument("column_config", metavar="column_config", type=argparse.FileType('r'), nargs=1, help="Configuration file containing the columns that should be extracted.")
+    argument_parser.add_argument("column_file", metavar="column_file", type=argparse.FileType('r'), nargs=1, help="The file that contains the data.")
+    return argument_parser.parse_args()
+
+##
 # Main entrypoint
 #
 def main(argv):
-    if len(argv) != 3:
-        print("Usage: extract_column.py column_config column_file")
-        return
-    
-    if not os.path.exists(argv[1]):
-        print("No such file: ", argv[1])
-        return
-    if not os.path.exists(argv[2]):
-        print("No such file: ", argv[2])
-        return
+    parsed_args = parse_arguments()
 
-    column_config_factory = ColumnConfigFactory()
-    column_config = column_config_factory.create_from_config(argv[1])
-    column_file = open(argv[2], 'r')
-    
-    extracted_columns = extract_columns(column_config, column_file)
-    column_file.close()
+    column_config = ColumnConfigFactory().create_from_config(parsed_args.column_config[0])
+    extracted_columns = extract_columns(column_config, parsed_args.column_file[0])
 
     print_columns(column_config.get_columns_to_extract(), extracted_columns)
 
