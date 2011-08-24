@@ -120,9 +120,9 @@ def extract_columns(column_config, column_file):
 
 
 def print_columns(column_names, extracted_columns):
-    print(" ".join(column_names))
+    print("\t".join(column_names))
     for row in extracted_columns:
-        print(" ".join(row))
+        print("\t".join(row))
 
 ##
 # Main entrypoint
