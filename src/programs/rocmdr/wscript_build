@@ -8,6 +8,12 @@
 ##
 # Build the rocmdr program.
 #
-bld.program(source='rocmdr.cpp',
+conf.find_program('gengetopt', var='GENGETOPT')
+bld(
+    rule='${GENGETOPT} -i ${SRC} -u',
+    target="cmdline.h cmdline.c",
+    source="rocmdr.ggo")
+
+bld.program(source='rocmdr.cpp cmdline.c',
             target='rocmdr',
             use='rocmdrlib')

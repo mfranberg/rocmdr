@@ -1,0 +1,18 @@
+# Name of your program
+package "rocmdr"
+
+# Version of your program
+version "1.0"
+
+purpose "To determine which SNPs are involved in gene-environment interactions."
+
+usage "rocmdr: [OPTIONS] snps factors phenotype"
+
+section "Arguments"
+	text "snps    is an n x m matrix of genotypes."
+	text "factors    is an n x k matrix of environmental factors."
+	text "phenotype    is an n x 1 vector of case/control information.\n"
+
+section "Parameters"
+	option "output-file" f "Saves the output to a file instead." string typestr="filename" optional
+	option "verbose" v "Outputs extra information during run." flag off
