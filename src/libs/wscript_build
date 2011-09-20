@@ -1,2 +1,2 @@
 
-bld.recurse("rocmdrlib cxxtest boost")
+bld.recurse("rocmdrlib cxxtest boost libcsv")

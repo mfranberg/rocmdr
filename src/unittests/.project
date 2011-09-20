@@ -5,6 +5,7 @@
 	<projects>
 		<project>cxxtest</project>
 		<project>rocmdrlib</project>
+		<project>libcsv</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

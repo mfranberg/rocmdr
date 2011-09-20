@@ -16,4 +16,4 @@ bld(
 
 bld.program(source='rocmdr.cpp cmdline.c',
             target='rocmdr',
-            use='rocmdrlib')
+            use='rocmdrlib libcsv')

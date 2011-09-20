@@ -24,10 +24,13 @@
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.1686523657" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.570170560" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
 								<option id="macosx.cpp.link.option.paths.673686704" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rocmdrlib/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cxxtest/Debug}&quot;"/>
 								</option>
 								<option id="macosx.cpp.link.option.libs.208007125" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" value="csv"/>
 									<listOptionValue builtIn="false" value="rocmdrlib"/>
 									<listOptionValue builtIn="false" value="cxxtest"/>
 								</option>
@@ -38,8 +41,11 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug.214923159" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.exe.debug">
 								<option id="gnu.both.asm.option.include.paths.1116073634" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cxxtest}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rocmdrlib/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/inc}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2040481216" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -48,8 +54,11 @@
 								<option id="gnu.cpp.compilermacosx.exe.debug.option.optimization.level.1283636245" name="Optimization Level" superClass="gnu.cpp.compilermacosx.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1084862346" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.207130665" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cxxtest}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rocmdrlib/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/inc}&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.837312186" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CXXTEST_HAVE_EH=1"/>
@@ -61,6 +70,8 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.macosx.exe.debug.option.optimization.level.1647740991" name="Optimization Level" superClass="gnu.c.compiler.macosx.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.macosx.exe.debug.option.debugging.level.1469120040" name="Debug Level" superClass="gnu.c.compiler.macosx.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1037055139" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/rocmdrlib}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/cxxtest}&quot;"/>
 								</option>
@@ -498,6 +509,15 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/rocmdrlib"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/rocmdrlib/Debug"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="rocmdrlib"/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="libcsv;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/libcsv"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Debug"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/libcsv/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="csv"/>
 					</externalSetting>
 				</externalSettings>
 			</storageModule>

@@ -1,0 +1,6 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# Thomas Nagy, 2006-2010 (ita)
+
+library_files = bld.path.ant_glob("src/*")
+bld.stlib(target='libcsv', source=library_files, includes='inc', export_includes='inc')
