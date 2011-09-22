@@ -56,6 +56,11 @@ public:
 	void addColumnFirst(const std::vector<T> column);
 
 	/**
+	 * Removes the last column.
+	 */
+	void removeColumnLast();
+
+	/**
 	 * Returns the column specified by the given index.
 	 *
 	 * @param columnIndex The 0-based index of the column.
@@ -125,6 +130,13 @@ ColumnData<T>::addColumnFirst(const std::vector<T> column)
 
 	std::vector<T> columnCopy( column );
 	m_columns.insert( m_columns.begin( ), columnCopy );
+}
+
+template <class T>
+void
+ColumnData<T>::removeColumnLast()
+{
+	m_columns.pop_back( );
 }
 
 template <class T>

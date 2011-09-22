@@ -125,7 +125,7 @@ RocMdrAnalysis::getCombinations(std::vector< std::vector<unsigned int> > *combin
 		{
 			const std::vector<unsigned int> &column = m_data.getColumn( j );
 			unsigned int value = column[ cellList[ i ].lastIndividual ];
-			(*combinationList)[i].push_back( value );
+			(*combinationList)[ i ].push_back( value );
 		}
 	}
 }
@@ -178,7 +178,7 @@ void
 RocMdrAnalysis::sortCells(const std::map<ColumnHasher::hash_type, CellInfo> &cellCounter, std::vector<CellInfo> *cellList)
 {
 	std::map<ColumnHasher::hash_type, CellInfo>::const_iterator it;
-	for(it = cellCounter.begin(); it != cellCounter.end(); ++it)
+	for(it = cellCounter.begin( ); it != cellCounter.end( ); ++it)
 	{
 		cellList->push_back( it->second );
 	}
