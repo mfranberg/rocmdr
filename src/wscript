@@ -22,11 +22,18 @@ def options(opt):
 # Configures global options, and sets up the following environment variables:
 #
 def configure(conf):
+    from waflib import Options
     conf.load('compiler_cxx')
 
     configure_cxxtest(conf)
 
-    conf.recurse("unittests")
+    flags = ["-Wall", "-pedantic", "-Wno-long-long"]
+    if "debug" in Options.commands:
+        conf.env.CXXFLAGS = flags + ["-g"]
+    elif "profile" in Options.commands:
+        conf.env.CXXFLAGS = flags + ["-pg"]
+    else:
+        conf.env.CXXFLAGS = flags + ["-O2"]
 
 ## 
 # Sets up the following environment variables for cxxtest:
