@@ -24,9 +24,9 @@ void
 CSVIntProcessor::onField(const std::string &field)
 {
 	int fieldAsInt;
-	unsigned int charactersUsed;
+	int charactersUsed;
 	int numScannedElements = sscanf( field.c_str( ), "%d%n", &fieldAsInt, &charactersUsed );
-	if( numScannedElements == 1 && charactersUsed == field.size( ) )
+	if( numScannedElements == 1 && charactersUsed == (int) field.size( ) )
 	{
 		m_currentRow.push_back( fieldAsInt );
 	}

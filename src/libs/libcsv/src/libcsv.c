@@ -66,7 +66,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define SUBMIT_CHAR(p, c) ((p)->entry_buf[entry_pos++] = (c))
 
-static char *csv_errors[] = {"success",
+static const char *csv_errors[] = {"success",
                              "error parsing data while strict checking enabled",
                              "memory exhausted while increasing buffer size",
                              "data size too large",
@@ -79,7 +79,7 @@ csv_error(struct csv_parser *p)
   return p->status;
 }
 
-char *
+const char *
 csv_strerror(int status)
 {
   /* Return a textual description of status */
