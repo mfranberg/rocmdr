@@ -169,6 +169,6 @@ namespace CxxTest
         else
             l._tail = _prev;
     }
-};
+}
 
 #endif // __cxxtest__LinkedList_cpp__
