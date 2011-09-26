@@ -8,3 +8,5 @@ docs/*/*.log
 docs/*/*.pdf
 src/build/
 src/unittests/runner.cpp
+src/programs/rocmdr/cmdline.h
+src/programs/rocmdr/cmdline.c
