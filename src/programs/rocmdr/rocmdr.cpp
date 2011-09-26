@@ -1,45 +1,62 @@
+#include <algorithm>
+
 #include <stdlib.h>
 
 #include <ColumnData.h>
 #include <RocMdrAnalysis.h>
 
-#include "CSVReader.h"
-#include "CSVIntProcessor.h"
+#include "auc/PValueSimulator.h"
+#include "auc/pvalues.h"
 
+#include "parsing.h"
 #include "cmdline.h"
 
-void readToColumnData(const char *path, ColumnData<unsigned int> *data)
+/**
+ * Computes the number of distinct values in each column,
+ * and returns a vector them.
+ *
+ * @param factors A set of columns.
+ *
+ *Ê@return A vector containing the counts of the distinct values
+ *Ê        of each column.
+ */
+std::vector<unsigned int>
+computeColumnRanges(ColumnData<unsigned int> &factors)
 {
-	CSVReader parser;
-	CSVIntProcessor processor;
-	if( !parser.parse( path, &processor ) )
+	std::vector<unsigned int> columnRanges;
+
+	columnRanges.push_back( 3 ); // For SNP
+	for(unsigned int i = 0; i < factors.size( ); i++)
 	{
-		printf( "rocmdr: No such file %s\n", path );
-		exit( 0 );
+		const std::vector< unsigned int > column = factors.getColumn( i );
+		unsigned int maxElement = *std::max_element( column.begin( ), column.end( ) ) + 1;
+		columnRanges.push_back( maxElement );
 	}
 
-	std::vector< std::vector< int > > columns = processor.getColumnData( );
-	for(unsigned int i = 0; i < columns.size( ); i++)
-	{
-		std::vector<int> currentColumn = columns[ i ];
-		std::vector<unsigned int> unsignedColumn( currentColumn.begin( ), currentColumn.end( ) );
-		data->addColumn( unsignedColumn );
-	}
+	return columnRanges;
 }
 
-void readPhenotypes(const char *path, std::vector<bool> *phenotypes)
+/**
+ * Outputs a set of AUC values and their corresponding p-values.
+ *
+ * @param aucValues List of AUC values.
+ * @param pValues List of a p-value corresponding to each AUC value.
+ *
+ */
+void printAUCValues(const std::vector<float> &aucValues, const std::vector<float> &pValues)
 {
-	CSVReader parser;
-	CSVIntProcessor processor;
-	parser.parse( path, &processor );
-
-	std::vector< int > phenotypesAsInt = processor.getColumnData( )[ 0 ];
-	for(unsigned int i = 0; i < phenotypesAsInt.size( ); i++)
-	{
-		phenotypes->push_back( phenotypesAsInt[ i ] == 1 );
-	}
+    printf( "SNP\tAUC\tP-value\n" );
+    for(unsigned int i = 0; i < aucValues.size( ); i++)
+    {
+        printf("%d\t%f\t%f\n", i, aucValues[ i ], pValues[ i ] );
+    }
 }
 
+/**
+ * Computes a ROCAUC for each SNP together with the
+ * environmental factors. And prints the AUC and
+ * it's corresponding p-value for each SNP.
+ */
 int main(int argc, char **argv)
 {
 	gengetopt_args_info argsInfo;
@@ -66,11 +83,7 @@ int main(int argc, char **argv)
 	// Read phenotypes
 	std::vector<bool> phenotypes;
 	readPhenotypes( argsInfo.inputs[ 2 ], &phenotypes );
-
-	// Compute original AUC
 	PhenotypeMapping phenotypeMapping( phenotypes );
-	RocMdrAnalysis mdrAnalyzer( factors, phenotypeMapping );
-	float originalAUC = mdrAnalyzer.calculateAuc( );
 
 	// Compute AUC with each SNP
 	std::vector<float> aucValues;
@@ -84,14 +97,12 @@ int main(int argc, char **argv)
 		factors.removeColumnLast( );
 	}
 
-	// Print AUC ratios
-	printf("SNP\tAUC\tratio\n");
-	for( unsigned int i = 0; i < aucValues.size( ); i++)
-	{
-		printf( "%d\t%f\t%f\n", i, aucValues[ i ], aucValues[ i ] / originalAUC );
-	}
+	// Print AUCs
+	std::vector<unsigned int> columnRanges = computeColumnRanges( factors );
+	std::vector<float> pValues = simulatePValues( aucValues, columnRanges, phenotypes.size( ), "/tmp/rocmdr.sim" );
+    printAUCValues( aucValues, pValues );
 
-	cmdline_parser_free( &argsInfo );
+    cmdline_parser_free( &argsInfo );
 
     return 0;
 }

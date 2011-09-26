@@ -14,6 +14,6 @@ bld(
     target="cmdline.h cmdline.c",
     source="rocmdr.ggo")
 
-bld.program(source='rocmdr.cpp cmdline.c',
+bld.program(source='rocmdr.cpp cmdline.c parsing.cpp auc/PValueSimulator.cpp auc/pvalues.cpp',
             target='rocmdr',
             use='rocmdrlib libcsv')
