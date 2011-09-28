@@ -78,7 +78,8 @@ private:
 
 RocMdrAnalysis::RocMdrAnalysis(ColumnData<unsigned int> &data, const PhenotypeMapping &phenotypes)
 : m_data( data ),
-  m_phenotypes( phenotypes )
+  m_phenotypes( phenotypes ),
+  m_cellCounter( phenotypes.size( ) )
 {
 	m_cellCounter.set_empty_key( ULONG_LONG_MAX );
 }
@@ -156,12 +157,8 @@ RocMdrAnalysis::countSamplesInEachCell(const PhenotypeMapping &phenotypes,
 {
 	for(unsigned int i = 0; i < hashList.size( ); i++)
 	{
-		if( cellCounter->count( hashList[ i ] ) == 0 )
-		{
-			(*cellCounter)[ hashList[ i ] ] = CellInfo( );
-		}
-
-		CellInfo *cellInfo = &(*cellCounter)[ hashList[ i ] ];
+		ColumnHasher::hash_type cellHash = hashList[ i ];
+		CellInfo *cellInfo = &(*cellCounter)[ cellHash ];
 		if( m_phenotypes.isPositive( i ) )
 		{
 			cellInfo->numTp += 1;
