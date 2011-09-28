@@ -27,13 +27,16 @@ def configure(conf):
 
     configure_cxxtest(conf)
 
-    flags = ["-Wall", "-pedantic", "-Wno-long-long"]
+    conf.env['CXXFLAGS'] = ["-Wall", "-pedantic", "-Wno-long-long"]
     if "debug" in Options.commands:
-        conf.env.CXXFLAGS = flags + ["-g"]
+        conf.env.append_value('CXXFLAGS', "-g")
+        Options.commands.remove("debug")
     elif "profile" in Options.commands:
-        conf.env.CXXFLAGS = flags + ["-pg"]
+        conf.env.append_value('CXXFLAGS', "-pg")
+        conf.env['LINKFLAGS'] = ["-pg"]
+        Options.commands.remove("profile")
     else:
-        conf.env.CXXFLAGS = flags + ["-O2"]
+        conf.env.append_value('CXXFLAGS', "-O2")
 
 ## 
 # Sets up the following environment variables for cxxtest:
