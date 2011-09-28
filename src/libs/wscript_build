@@ -1,2 +1,2 @@
 
-bld.recurse("rocmdrlib cxxtest boost libcsv")
+bld.recurse("rocmdrlib cxxtest boost libcsv dense_hashmap")

@@ -80,7 +80,7 @@ RocMdrAnalysis::RocMdrAnalysis(ColumnData<unsigned int> &data, const PhenotypeMa
 : m_data( data ),
   m_phenotypes( phenotypes )
 {
-
+	m_cellCounter.set_empty_key( ULONG_LONG_MAX );
 }
 
 float
@@ -152,7 +152,7 @@ RocMdrAnalysis::hashSamples(ColumnData<unsigned int> &data, std::vector<ColumnHa
 void
 RocMdrAnalysis::countSamplesInEachCell(const PhenotypeMapping &phenotypes,
 							  const std::vector<ColumnHasher::hash_type> &hashList,
-							  std::map<ColumnHasher::hash_type, CellInfo> *cellCounter)
+							  google::dense_hash_map<ColumnHasher::hash_type, CellInfo> *cellCounter)
 {
 	for(unsigned int i = 0; i < hashList.size( ); i++)
 	{
@@ -175,9 +175,9 @@ RocMdrAnalysis::countSamplesInEachCell(const PhenotypeMapping &phenotypes,
 }
 
 void
-RocMdrAnalysis::sortCells(const std::map<ColumnHasher::hash_type, CellInfo> &cellCounter, std::vector<CellInfo> *cellList)
+RocMdrAnalysis::sortCells(const google::dense_hash_map<ColumnHasher::hash_type, CellInfo> &cellCounter, std::vector<CellInfo> *cellList)
 {
-	std::map<ColumnHasher::hash_type, CellInfo>::const_iterator it;
+	google::dense_hash_map<ColumnHasher::hash_type, CellInfo>::const_iterator it;
 	for(it = cellCounter.begin( ); it != cellCounter.end( ); ++it)
 	{
 		cellList->push_back( it->second );

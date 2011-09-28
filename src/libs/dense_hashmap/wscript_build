@@ -1,0 +1,6 @@
+#! /usr/bin/env python
+# encoding: utf-8
+# Thomas Nagy, 2006-2010 (ita)
+
+# Header only library
+bld(includes = '.', export_includes = '.', name = 'dense_hashmap')

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>rocmdrlib</name>
+	<name>dense_hashmap</name>
 	<comment></comment>
 	<projects>
-		<project>dense_hashmap</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -32,7 +31,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/rocmdrlib/Debug}</value>
+					<value>${workspace_loc:/dense_hashmap/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>

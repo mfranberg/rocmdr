@@ -3,4 +3,4 @@
 # Thomas Nagy, 2006-2010 (ita)
 
 library_files = bld.path.ant_glob("src/*.cpp")
-bld.stlib(target='rocmdrlib', source=library_files, includes='inc/', export_includes='inc/')
+bld.stlib(target='rocmdrlib', source=library_files, includes='inc/', export_includes='inc/', use='dense_hashmap')

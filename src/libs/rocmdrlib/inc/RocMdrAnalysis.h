@@ -14,6 +14,7 @@
 
 #include <map>
 #include <vector>
+#include <google/dense_hash_map>
 
 /**
  * Calculates statistics related to the area under the ROC curve
@@ -108,7 +109,7 @@ private:
 	 */
 	void countSamplesInEachCell(const PhenotypeMapping &phenotypes,
 								  const std::vector<ColumnHasher::hash_type> &hashList,
-								  std::map<ColumnHasher::hash_type, CellInfo> *cellCounter);
+								  google::dense_hash_map<ColumnHasher::hash_type, CellInfo> *cellCounter);
 
 	/**
 	 * Produces a list of cells is sorted according to:
@@ -124,7 +125,7 @@ private:
 	 *                 one containing the highest fraction
 	 *                 of positive to negative cells.
 	 */
-	void sortCells(const std::map<ColumnHasher::hash_type, CellInfo> &cellCounter, std::vector<CellInfo> *cellList);
+	void sortCells(const google::dense_hash_map<ColumnHasher::hash_type, CellInfo> &cellCounter, std::vector<CellInfo> *cellList);
 
 	/**
 	 * The set of samples.
@@ -146,7 +147,8 @@ private:
 	 * Counts the number of points in a cell depending
 	 * on which phenotype they have.
 	 */
-	std::map<ColumnHasher::hash_type, CellInfo> m_cellCounter;
+	//std::map<ColumnHasher::hash_type, CellInfo> m_cellCounter;
+	google::dense_hash_map<ColumnHasher::hash_type, CellInfo> m_cellCounter;
 };
 
 #endif /* ROCMDRANALYSIS_H_ */
