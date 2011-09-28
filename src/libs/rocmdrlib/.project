@@ -3,7 +3,6 @@
 	<name>rocmdrlib</name>
 	<comment></comment>
 	<projects>
-		<project>dense_hashmap</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
