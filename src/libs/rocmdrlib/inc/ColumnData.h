@@ -46,14 +46,14 @@ public:
 	 *
 	 * @param column The column to add.
 	 */
-	void addColumn(const std::vector<T> column);
+	void addColumn(const std::vector<T> &column);
 
 	/**
 	 * Adds the given column so that it gets index 0.
 	 *
 	 * @param column The column to add first.
 	 */
-	void addColumnFirst(const std::vector<T> column);
+	void addColumnFirst(const std::vector<T> &column);
 
 	/**
 	 * Removes the last column.
@@ -108,7 +108,7 @@ ColumnData<T>::ColumnData(int maxSize)
 
 template <class T>
 void
-ColumnData<T>::addColumn(const std::vector<T> column)
+ColumnData<T>::addColumn(const std::vector<T> &column)
 {
 	if( numberOfRows( ) > 0 && numberOfRows( ) != column.size( ) )
 	{
@@ -121,7 +121,7 @@ ColumnData<T>::addColumn(const std::vector<T> column)
 
 template <class T>
 void
-ColumnData<T>::addColumnFirst(const std::vector<T> column)
+ColumnData<T>::addColumnFirst(const std::vector<T> &column)
 {
 	if( size( ) > 0 && numberOfRows( ) != column.size( ) )
 	{
