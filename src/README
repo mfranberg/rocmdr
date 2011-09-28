@@ -5,3 +5,24 @@ The binaries will end up in the 'build' directory.
 
 To build tests:
 ./waf/waf build tests
+
+-----
+
+Use CSV file structure for input data to rocmdr.
+
+SNPs:
+snp1    snp2    snp3
+0       2       1
+1       2       0
+0       0       2
+
+Environmental factors:
+env1    env2    env3
+0.14    0.6     0.55
+0.53    1.2     0.36
+0.35    0.3     0.33
+
+Phenotype:
+1
+0
+0
