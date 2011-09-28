@@ -19,5 +19,5 @@ for test_file in test_files:
 for generated_test_file in generated_test_files:
     bld.program(source=generated_test_file,
                 target=generated_test_file.replace(".cpp",""),
-                use='rocmdrlib cxxtest',
+                use='rocmdrlib cxxtest libcsv',
                 includes='.')
