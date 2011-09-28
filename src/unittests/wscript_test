@@ -4,5 +4,5 @@ if ctx.options.test != 'all':
 
 test_binaries = ctx.path.get_bld().ant_glob(pattern)
 for test_binary in test_binaries:
-    print "Starting test: ", test_binary.name
+    print("Starting test: ", test_binary.name)
     ctx.exec_command(test_binary.abspath())
