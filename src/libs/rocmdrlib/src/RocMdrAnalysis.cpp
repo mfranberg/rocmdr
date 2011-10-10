@@ -179,6 +179,7 @@ RocMdrAnalysis::sortCells(const google::dense_hash_map<ColumnHasher::hash_type, 
 	{
 		cellList->push_back( it->second );
 	}
+
 	CellComparator comparator( m_phenotypes.getNumPositive( ), m_phenotypes.getNumNegative( ) );
 	sort( cellList->rbegin( ), cellList->rend( ), comparator );
 }

@@ -5,8 +5,7 @@
 #include <ColumnData.h>
 #include <RocMdrAnalysis.h>
 
-#include "auc/PValueSimulator.h"
-#include "auc/pvalues.h"
+#include "auc/NoAssociationSimulator.h"
 
 #include "parsing.h"
 #include "cmdline.h"
@@ -34,6 +33,29 @@ computeColumnRanges(ColumnData<unsigned int> &factors)
 	}
 
 	return columnRanges;
+}
+
+/**
+ * Computes the p-values for a given vector of AUC values.
+ *
+ * @param factors A set of columns.
+ * @param phenotypes A list of case/control classifications.
+ * @param aucValues A list of AUC values to compute p-values for.
+ *
+ * @return A list of p-values corresponding to each AUC value.
+ */
+std::vector<float>
+computePValues(ColumnData<unsigned int> &factors, const PhenotypeMapping &phenotypes, const std::vector<float> &aucValues)
+{
+	NoAssociationSimulator pValueSimulator( factors, phenotypes );
+
+	std::vector<float> pValues( aucValues.size( ), 0.0f );
+	for(unsigned int i = 0; i < aucValues.size( ); i++)
+	{
+		pValues[ i ] = pValueSimulator.computePValue( aucValues[ i ] );
+	}
+
+	return pValues;
 }
 
 /**
@@ -99,7 +121,7 @@ int main(int argc, char **argv)
 
 	// Print AUCs
 	std::vector<unsigned int> columnRanges = computeColumnRanges( factors );
-	std::vector<float> pValues = simulatePValues( aucValues, columnRanges, phenotypes.size( ), "/tmp/rocmdr.sim" );
+	std::vector<float> pValues = computePValues( factors, phenotypeMapping, aucValues );
     printAUCValues( aucValues, pValues );
 
     cmdline_parser_free( &argsInfo );
