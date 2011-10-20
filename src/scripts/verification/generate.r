@@ -45,6 +45,29 @@ generateSNPs = function(numSamples, numSnps, freq = 0.4 )
 }
 
 ##
+# Generates a data frame of SNPs uniformly.
+#
+# @param numSample The length of the column.
+# @param numSnps The number of SNPs to generate.
+#
+# @return A data frame of SNPs. The name of each column is "snpX" where
+#         X is a number from 1 to numSnps.
+#
+generateSNPUniform = function(numSamples, numSnps)
+{
+    snpMatrix = matrix( nrow = numSamples, ncol = numSnps )
+    for( i in 1:numSnps )
+    {
+        snpMatrix[ ,i ] = sample( 0:2, numSamples, replace = TRUE )
+    }
+
+    snpFrame = as.data.frame( snpMatrix )
+    names( snpMatrix ) = paste( "snp", 1:numSnps, sep = '' )
+
+    return( snpFrame )
+}
+
+##
 # Generates a table of environmental factors.
 #
 # @param numIntervals The number of levels for each factor.
@@ -62,6 +85,30 @@ generateFactors = function(numIntervals, numSamples, numColumns)
         lnormMean = runif( 1, 1, 5 )
         lnormVar  = runif( 1, 0, 2 )
         factorMatrix[ ,i ] = generateFactorColumn( numSamples, lnormMean, lnormVar, numIntervals )
+    }
+
+    factorFrame = as.data.frame( factorMatrix )
+    names( factorMatrix ) = paste( "env", 1:numColumns, sep = '' )
+
+    return( factorFrame )
+}
+
+##
+# Generates a set of uniformly distributed factors.
+#
+# @param numIntervals The number of levels for each factor.
+# @param numSample The number of samples of each factor.
+# @param numColumns The number of factors.
+#
+# @return A data frame of environmental factors. The name of each column
+#         is "envX" where X is a number from 1 to numColumns.
+#
+generateFactorsUniform = function(numIntervals, numSamples, numColumns)
+{
+    factorMatrix = matrix( nrow = numSamples, ncol = numColumns )
+    for( i in 1:numColumns )
+    {
+        factorMatrix[ ,i ] = sample( 0:(numIntervals-1), numSamples, replace = TRUE )   
     }
 
     factorFrame = as.data.frame( factorMatrix )
@@ -131,6 +178,23 @@ riskToCaseControl = function(risk)
     case_flip = runif( length( risk ), 0, 1 )
     case = ifelse( case_flip < risk, 1, 0 )
     return( case )
+}
+
+##
+# Generates a deterministic association signal with noise.
+#
+# 
+#
+generateRandomXor = function(numSamples, noise = 0.2)
+{
+    snps = rbinom( numSamples, 1, 0.5 )
+    env  = rbinom( numSamples, 1, 0.5 )
+    phenotype = ( !snps & env ) | ( snps & !env )
+
+    noise = rbinom( numSamples, 1, noise )
+    noisy_phenotype = ifelse( ((noise == 1 & phenotype == 0) | phenotype == 1), 1, 0 )
+
+    return( list( snps, env, noisy_phenotype ) ) 
 }
 
 ##

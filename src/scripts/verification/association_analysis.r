@@ -4,6 +4,7 @@ library(infotheo)
 argv = commandArgs( trailingOnly = FALSE )
 base_dir = dirname( substring( argv[ grep( "--file=", argv ) ], 8 ) )
 source( paste( base_dir, 'generate.r', sep = "/" ) )
+source( paste( base_dir, 'rocmdr_call.r', sep = "/" ) )
 
 argv = commandArgs( trailingOnly = TRUE )
 if ( length( argv ) != 2 )
@@ -16,78 +17,121 @@ if ( length( argv ) != 2 )
 rocMdrLocation = argv[ 1 ]
 outputFile = argv[ 2 ]
 
-tmpDir = "/tmp/"
-factorFile = paste( tmpDir, "factor_test.txt", sep = '/' )
-snpFile = paste( tmpDir, "snps_test.txt", sep = '/' )
-phenotypeFile = paste( tmpDir, "phenotype_test.txt", sep = '/' )
-resultFile = paste( tmpDir, "res.txt", sep = '/' )
+# Number of SNPs
+numSnps = 100
 
-# Map between genotype and risk paramterization
-risk_map = rbind(
-    c( 0.0, 2, 8 ),
-    c( 0.0, 2, 8 ),
-    c( 0.0, 3, 2.5 )
-)
+##
+# Generates samples from a XOR model
+#
+generate.xor = function( N, noise )
+{
+    real = list( )
+    
+    association = generateRandomXor( N, noise )
+    real$snp = association[[ 1 ]]
+    real$env.disc = association[[ 2 ]]
+    real$phenotype = association[[ 3 ]]
+    
+    return( real )
+}
 
-# Number of samples
-N = 2000
+##
+# Generates samples from a logistic regression model that
+# only contains an interaction term.
+#
+generate.logistic = function( N, numIntervals, effectSize )
+{
+    real = list( )
+    
+    real$snp = rbinom( N, 2, 0.4 )
+    real$env  = rnorm( N, 0, 1 )
+    real$env.disc = discretize( real$env, nbins = numIntervals ) - 1
+
+    beta = effectSize
+    risk = 1 / ( 1 + exp( -( beta * real$snp * real$env ) ) )
+    flip = runif( N )
+    real$phenotype = ifelse( risk <= flip, 1, 0 )
+    
+    return( real )
+}
+
+##
+# Generates a sample from a model similar to logistic regression
+# but where each SNP can have their own coefficients.
+#
+generate.realistic = function( N, numIntervals )
+{
+    # Map between genotype and risk paramterization
+    risk_map = rbind(
+        c( 0.0, 2, 8 ),
+        c( 0.0, 2, 8 ),
+        c( 0.0, 3, 2.5 )
+    )
+    
+    real = list( )
+    
+    real$env = rlnorm( N, 1, 0.3 )
+    real$env.disc = discretize( real$env, nbins = numIntervals )$X - 1
+    real$snp = rbinom( N, 2, sqrt( 0.4 ) )
+    real$phenotype = riskToCaseControl( generateRisk( real$snp, real$env, risk_map ) )
+    
+    return( real )
+}
+
+generate = function( numColumns, outputFiles )
+{
+    # Number of samples
+    N = 2000
+        
+    # Number of intervals in each risk factors
+    numIntervals = 2
+    
+    real = generate.realistic( N, numIntervals )
+    
+    factors = generateFactorsUniform( numIntervals, N, numColumns )
+    snps = generateSNPUniform( N, numSnps )
+
+    # Store temporary file
+    saveAsCSV( outputFiles$factor, cbind( real$env.disc, factors ) )
+    saveAsCSV( outputFiles$snp, cbind( real$snp, snps ) )
+    saveAsCSV( outputFiles$phenotype, real$phenotype )
+}
+
+reduce = function( columnSize, resultList, pValueAndPowerList )
+{
+    totalPValue = 0.0
+    totalNumSignificantNull = 0.0
+    for( result in resultList )
+    {
+        totalPValue = totalPValue + ( result$P.value[ 1 ] )
+        
+        numSignificantNull = sum( result$P.value[ 2:(length( result$P.value )) ] <= 0.05 )
+        totalNumSignificantNull = totalNumSignificantNull + numSignificantNull
+    }
+    
+    averagePValue = totalPValue / length( resultList )
+    averageFractionSignificantNull = totalNumSignificantNull / ( numSnps * length( resultList ) )
+    
+    nextElement = length( pValueAndPowerList ) + 1
+    pValueAndPowerList[[ nextElement ]] = c( averagePValue, averageFractionSignificantNull )
+    
+    return( pValueAndPowerList )
+}
 
 # Number of iterations for each column size
-numIterations = 50
-
-# Number of intervals in each risk factors
-numIntervals = 2
-
-# Number of SNPs
-numSnps = 200
+numIterations = 30
 
 # Range of no-association columns
 columnStart = 1 
 columnEnd = 15
+columnSizes = columnStart:columnEnd
 
-snpsPerColumn = columnStart:columnEnd
+pValueAndPowerList = list( )
+rocMdrBatch = RocMdrBatch( rocMdrLocation, numIterations )
+pValueAndPowerList = runBatch( rocMdrBatch, columnSizes, generate, reduce, pValueAndPowerList )
 
 allResults = data.frame( columnStart:columnEnd + 1 )
-allResults$averagePValue = columnStart:columnEnd
-allResults$averageNumSignificant = columnStart:columnEnd
-
-for( numColumns in columnStart:columnEnd )
-{
-    totalPValue = 0.0
-    totalNumSignificant = 0.0
-    for( testIteration in 1:numIterations )
-    {
-        print( paste( "Column: ", numColumns, "Iter: ", testIteration ) )
-        
-        # Generate true assocation
-        real.env = rlnorm( N, 1, 0.3 )
-        real.env.disc = discretize( real.env, nbins = numIntervals )$X - 1
-        real.snp = rbinom( N, 2, sqrt( 0.4 ) )
-        real.phenotype = riskToCaseControl( generateRisk( real.snp, real.env, risk_map ) )
-        
-        # Generate no association
-        factors = generateFactors( numIntervals, N, numColumns )
-        snps = generateSNPs( N, numSnps )
-
-        # Store temporary file
-        saveAsCSV( factorFile, cbind( real.env.disc, factors ) )
-        saveAsCSV( snpFile, cbind( real.snp, snps ) )
-        saveAsCSV( phenotypeFile, real.phenotype )
-
-        filenames = paste( snpFile, factorFile,  phenotypeFile )
-        call = paste( rocMdrLocation, filenames )        
-
-        system( paste( call, ">", resultFile ) )
-
-        results = read.table( resultFile, header = TRUE )
-        
-        totalPValue = totalPValue + ( results$P.value[ 1 ] )
-        totalNumSignificant = totalNumSignificant + sum( results$P.value <= 0.05 ) / ( numSnps + 1 )
-    }
-
-    index = numColumns - columnStart + 1
-    allResults$averagePValue[ index ] = totalPValue / numIterations
-    allResults$averageNumSignificant[ index ] = totalNumSignificant / numIterations
-}
+allResults$averagePValue = unlist( lapply( pValueAndPowerList, "[", c( 1 ) ) )
+allResults$averageNumSignificant = unlist( lapply( pValueAndPowerList, "[", c( 2 ) ) )
 
 saveAsCSV( outputFile, allResults )
