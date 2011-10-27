@@ -1,15 +1,16 @@
 library(infotheo)
 
 argv = commandArgs( trailingOnly = TRUE )
-if ( length( argv ) != 2 )
+if ( length( argv ) != 3 )
 {
     message( "plot_pvalues: Wrong number of arguments." )
-    message( "Usage: association_analysis rocmdrStatsFile outputFile" )
+    message( "Usage: plot_pvalues effectSize rocmdrStatsFile outputFile" )
     quit( )
 }
 
-rocmdrStatsFile = argv[ 1 ]
-outputFile = argv[ 2 ]
+effectSize = argv[ 1 ]
+rocmdrStatsFile = argv[ 2 ]
+outputFile = argv[ 3 ]
 
 
 # Read data and coalesce columns
@@ -27,7 +28,7 @@ barplot( t(coalescedResults),
          xlab = "Number of cells",
          ylab = "P-value / Fraction significant",
          legend.text = c("P-value of significant SNP", "Fraction of significant SNPs" ),
-         main = "Number of cells and significance" )
+         main = paste( "Number of cells and significance effectSize = ", effectSize ) )
 
 dev.off( )
 
