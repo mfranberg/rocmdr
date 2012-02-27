@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#include <ColumnData.h>
-#include <PhenotypeMapping.h>
+#include <data/ColumnData.h>
+#include <data/PhenotypeMapping.h>
 
 /**
  * Simulates AUCs from a set of factors, assuming that SNPs

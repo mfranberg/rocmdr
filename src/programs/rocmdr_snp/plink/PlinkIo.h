@@ -16,7 +16,7 @@ extern "C"
 	#include <plinkio/plinkio.h>
 }
 
-#include <ColumnData.h>
+#include <data/ColumnData.h>
 
 class PlinkIo
 {

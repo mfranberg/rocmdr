@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-#include <PhenotypeMapping.h>
+#include <data/PhenotypeMapping.h>
 
 PhenotypeMapping::PhenotypeMapping()
 {

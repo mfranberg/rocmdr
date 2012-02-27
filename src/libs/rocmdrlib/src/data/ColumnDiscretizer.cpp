@@ -16,7 +16,7 @@
 
 #include <math.h>
 
-#include <ColumnDiscretizer.h>
+#include <data/ColumnDiscretizer.h>
 
 
 ColumnDiscretizer::ColumnDiscretizer(unsigned int numIntervals)

@@ -9,9 +9,9 @@
 #define ROCMDRANALYSIS_H_
 
 #include <Cell.h>
-#include <ColumnData.h>
-#include <ColumnHasher.h>
-#include <PhenotypeMapping.h>
+#include <data/ColumnData.h>
+#include <data/ColumnHasher.h>
+#include <data/PhenotypeMapping.h>
 
 #include <map>
 #include <vector>

@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <ColumnData.h>
+#include <data/ColumnData.h>
 
 /**
  * Class that collapses a set of columns into

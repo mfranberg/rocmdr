@@ -11,7 +11,7 @@
 
 #include <math.h>
 
-#include <ColumnHasher.h>
+#include <data/ColumnHasher.h>
 
 void
 ColumnHasher::hash(ColumnData<ColumnHasher::column_type> &data, std::vector<hash_type> *hashList)

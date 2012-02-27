@@ -9,11 +9,11 @@
 
 #include <time.h>
 
-#include <ColumnData.h>
-#include <PhenotypeMapping.h>
+#include <data/ColumnData.h>
+#include <data/PhenotypeMapping.h>
 #include <RocMdrAnalysis.h>
 
-#include "NoAssociationSimulator.h"
+#include <stat/NoAssociationSimulator.h>
 
 NoAssociationSimulator::NoAssociationSimulator()
 : m_numSamples( 0 ),

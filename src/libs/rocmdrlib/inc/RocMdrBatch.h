@@ -11,11 +11,27 @@
 #include <vector>
 
 #include <RocMdrResult.h>
-#include <NoAssociationSimulator.h>
+#include <stat/NoAssociationSimulator.h>
 
 class RocMdrBatch
 {
 public:
+	/**
+	 * Recursively computes the AUC for all possible
+	 * tables of the given interaction order.
+	 *
+	 * @param snps All SNPs such that each column contains the SNPs for
+	 *             a single loci.
+	 * @param phenotypes Disease status of the individuals.
+	 *
+	 * @return List of results that contains the AUC for each table
+	 *         of the given order.
+	 */
+	std::vector<RocMdrResult> run(unsigned int interactionOrder,
+									   ColumnData<unsigned char> snps,
+									   PhenotypeMapping phenotypes);
+
+private:
 	/**
 	 * Recursively computes the AUC for all possible
 	 * tables of the given order. At each recursive
@@ -38,22 +54,6 @@ public:
 					   std::vector<unsigned int> &curLoci,
 					   std::vector<RocMdrResult> *results);
 
-	/**
-	 * Recursively computes the AUC for all possible
-	 * tables of the given interaction order.
-	 *
-	 * @param snps All SNPs such that each column contains the SNPs for
-	 *             a single loci.
-	 * @param phenotypes Disease status of the individuals.
-	 *
-	 * @return List of results that contains the AUC for each table
-	 *         of the given order.
-	 */
-	std::vector<RocMdrResult> run(unsigned int interactionOrder,
-									   ColumnData<unsigned char> snps,
-									   PhenotypeMapping phenotypes);
-
-private:
 	/**
 	 * Simulates the AUC under the null hypothesis.
 	 */

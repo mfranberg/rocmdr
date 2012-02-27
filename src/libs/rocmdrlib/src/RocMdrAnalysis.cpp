@@ -9,11 +9,11 @@
 
 #include <Cell.h>
 #include <CellComparator.h>
-#include <ColumnHasher.h>
+#include <data/ColumnHasher.h>
 #include <RocMdrAnalysis.h>
 
 #include <cmath>
-#include <normal.h>
+#include <util/normal.h>
 
 RocMdrAnalysis::RocMdrAnalysis(ColumnData<RocMdrAnalysis::column_type> &data, const PhenotypeMapping &phenotypes)
 : m_data( data ),

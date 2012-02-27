@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include <ColumnData.h>
+#include <data/ColumnData.h>
 #include <RocMdrAnalysis.h>
 
 #include "parsing.h"

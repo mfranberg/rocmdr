@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "normal.h"
+#include <util/normal.h>
 
 double
 normcdf(double x)

@@ -8,7 +8,7 @@
 #ifndef COLUMNTRANSFORMER_H_
 #define COLUMNTRANSFORMER_H_
 
-#include <ColumnData.h>
+#include <data/ColumnData.h>
 
 /**
  * Interface for transforming data in columns, between

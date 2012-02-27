@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <ColumnData.h>
+#include <data/ColumnData.h>
 
 /**
  * Reads and populates a ColumnData object from a file. It assumes

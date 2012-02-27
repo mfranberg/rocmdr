@@ -5,7 +5,7 @@
  *      Author: fmattias
  */
 
-#include <ColumnTransformer.h>
+#include <data/ColumnTransformer.h>
 
 /**
  * A type of transformer that discretizes column data such

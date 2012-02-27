@@ -27,7 +27,7 @@
 
 const char *gengetopt_args_info_purpose = "Performs a k-wise rocmdr analysis.";
 
-const char *gengetopt_args_info_usage = "Usage: rocmdr: [OPTIONS] snps factors phenotype";
+const char *gengetopt_args_info_usage = "Usage: rocmdr: [OPTIONS] snps phenotype";
 
 const char *gengetopt_args_info_description = "";
 
@@ -35,9 +35,8 @@ const char *gengetopt_args_info_help[] = {
   "  -h, --help                   Print help and exit",
   "  -V, --version                Print version and exit",
   "\nParameters:",
-  "snps    Plink file containing factors    is an n x k matrix of environmental \nfactors.phenotype    is an n x 1 vector of case/control information.\n",
+  "snps    Plink file containing the genotypes.phenotype    is an n x 1 vector of \ncase/control information.\n",
   "  -k, --interaction-order=INT  Interaction order.  (default=`1')",
-  "  -n, --simulation-iters=INT   Number of samples for the p-value simulation.  \n                                 (default=`200000')",
   "  -f, --output-file=filename   Saves the output to a file instead.",
   "  -v, --verbose                Outputs extra information during run.  \n                                 (default=off)",
     0
@@ -68,7 +67,6 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->help_given = 0 ;
   args_info->version_given = 0 ;
   args_info->interaction_order_given = 0 ;
-  args_info->simulation_iters_given = 0 ;
   args_info->output_file_given = 0 ;
   args_info->verbose_given = 0 ;
 }
@@ -79,8 +77,6 @@ void clear_args (struct gengetopt_args_info *args_info)
   FIX_UNUSED (args_info);
   args_info->interaction_order_arg = 1;
   args_info->interaction_order_orig = NULL;
-  args_info->simulation_iters_arg = 200000;
-  args_info->simulation_iters_orig = NULL;
   args_info->output_file_arg = NULL;
   args_info->output_file_orig = NULL;
   args_info->verbose_flag = 0;
@@ -95,9 +91,8 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->help_help = gengetopt_args_info_help[0] ;
   args_info->version_help = gengetopt_args_info_help[1] ;
   args_info->interaction_order_help = gengetopt_args_info_help[4] ;
-  args_info->simulation_iters_help = gengetopt_args_info_help[5] ;
-  args_info->output_file_help = gengetopt_args_info_help[6] ;
-  args_info->verbose_help = gengetopt_args_info_help[7] ;
+  args_info->output_file_help = gengetopt_args_info_help[5] ;
+  args_info->verbose_help = gengetopt_args_info_help[6] ;
   
 }
 
@@ -182,7 +177,6 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
 {
   unsigned int i;
   free_string_field (&(args_info->interaction_order_orig));
-  free_string_field (&(args_info->simulation_iters_orig));
   free_string_field (&(args_info->output_file_arg));
   free_string_field (&(args_info->output_file_orig));
   
@@ -226,8 +220,6 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "version", 0, 0 );
   if (args_info->interaction_order_given)
     write_into_file(outfile, "interaction-order", args_info->interaction_order_orig, 0);
-  if (args_info->simulation_iters_given)
-    write_into_file(outfile, "simulation-iters", args_info->simulation_iters_orig, 0);
   if (args_info->output_file_given)
     write_into_file(outfile, "output-file", args_info->output_file_orig, 0);
   if (args_info->verbose_given)
@@ -489,13 +481,12 @@ cmdline_parser_internal (
         { "help",	0, NULL, 'h' },
         { "version",	0, NULL, 'V' },
         { "interaction-order",	1, NULL, 'k' },
-        { "simulation-iters",	1, NULL, 'n' },
         { "output-file",	1, NULL, 'f' },
         { "verbose",	0, NULL, 'v' },
         { 0,  0, 0, 0 }
       };
 
-      c = getopt_long (argc, argv, "hVk:n:f:v", long_options, &option_index);
+      c = getopt_long (argc, argv, "hVk:f:v", long_options, &option_index);
 
       if (c == -1) break;	/* Exit from `while (1)' loop.  */
 
@@ -519,18 +510,6 @@ cmdline_parser_internal (
               &(local_args_info.interaction_order_given), optarg, 0, "1", ARG_INT,
               check_ambiguity, override, 0, 0,
               "interaction-order", 'k',
-              additional_error))
-            goto failure;
-        
-          break;
-        case 'n':	/* Number of samples for the p-value simulation..  */
-        
-        
-          if (update_arg( (void *)&(args_info->simulation_iters_arg), 
-               &(args_info->simulation_iters_orig), &(args_info->simulation_iters_given),
-              &(local_args_info.simulation_iters_given), optarg, 0, "200000", ARG_INT,
-              check_ambiguity, override, 0, 0,
-              "simulation-iters", 'n',
               additional_error))
             goto failure;
         
