@@ -25,6 +25,11 @@ class ColumnHasher
 {
 public:
 	/**
+	 * Type used for columns.
+	 */
+	typedef unsigned char column_type;
+
+	/**
 	 * The type used for the hashed values. You can always
 	 * assume that this will support the operators < and =.
 	 */
@@ -37,7 +42,7 @@ public:
 	 * @param data The columns that will be transformed.
 	 * @param hashList The generated hash values will be stored here.
 	 */
-	static void hash(ColumnData<unsigned int> &data, std::vector<hash_type> *hashList);
+	static void hash(ColumnData<column_type> &data, std::vector<hash_type> *hashList);
 
 private:
 	/**
@@ -49,14 +54,14 @@ private:
 	 * @param numBits The number of bits each column value will be trunacted
 	 *                and hashed to.
 	 */
-	static void hashColumn(const std::vector<unsigned int> &column, std::vector<hash_type> *hashList, unsigned int numBits);
+	static void hashColumn(const std::vector<column_type> &column, std::vector<hash_type> *hashList, unsigned int numBits);
 
 	/**
 	 * Returns the number of bits required to hash the given column.
 	 *
 	 * @param column The column to find the number of bits required.
 	 */
-	static unsigned int numBitsForColumn(const std::vector<unsigned int> &column);
+	static unsigned int numBitsForColumn(const std::vector<column_type> &column);
 };
 
 

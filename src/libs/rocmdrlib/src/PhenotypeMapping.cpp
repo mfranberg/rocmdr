@@ -9,10 +9,32 @@
 
 #include <PhenotypeMapping.h>
 
+PhenotypeMapping::PhenotypeMapping()
+{
+}
+
 PhenotypeMapping::PhenotypeMapping(const std::vector<bool> &phenotypes)
 : m_phenotypes( phenotypes )
 {
 
+}
+
+PhenotypeMapping::PhenotypeMapping(const PhenotypeMapping &other)
+: m_phenotypes( other.m_phenotypes )
+{
+
+}
+
+PhenotypeMapping &
+PhenotypeMapping::operator=(const PhenotypeMapping &other)
+{
+	if( this != &other )
+	{
+		m_phenotypes.clear( );
+		m_phenotypes.assign( other.m_phenotypes.begin( ), other.m_phenotypes.end( ) );
+	}
+
+	return *this;
 }
 
 unsigned int

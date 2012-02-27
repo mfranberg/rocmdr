@@ -49,7 +49,7 @@ static const unsigned int NUM_COLUMNS = 2;
  * Giving an AUC of: 0.9375
  *
  */
-unsigned int g_riskFactors[NUM_COLUMNS][COLUMN_SIZE] = { {0, 0, 0, 1, 0, 0, 1, 1},
+unsigned char g_riskFactors[NUM_COLUMNS][COLUMN_SIZE] = { {0, 0, 0, 1, 0, 0, 1, 1},
 														 {0, 0, 0, 0, 1, 1, 1, 1} };
 bool g_phenotypes[COLUMN_SIZE] = {1, 0, 0, 1, 0, 0, 1, 1};
 
@@ -60,27 +60,22 @@ class RocMdrAnalysisTest : public CxxTest::TestSuite
 public:
 	void testAucAnalysis()
 	{
-		ColumnData<unsigned int> riskFactors;
+		ColumnData<unsigned char> riskFactors;
 		setupRiskFactors( &riskFactors );
 
 		std::vector<bool> phenotypes;
 		setupPhenotypes( &phenotypes );
 
 		RocMdrAnalysis rocMdrAnalysis( riskFactors, PhenotypeMapping( phenotypes ) );
-		TS_ASSERT_DELTA( rocMdrAnalysis.calculateAuc( ), TARGET_AUC, 0.0001f );
-
-		std::vector< std::vector<unsigned int> > combinations;
-		rocMdrAnalysis.getCombinations( &combinations );
-		TS_ASSERT_EQUALS( combinations.size( ), 4u );
-		TS_ASSERT( combinations[ 0 ][ 0 ] == 1u && combinations[ 0 ][ 1 ] == 1u );
+		TS_ASSERT_DELTA( rocMdrAnalysis.getAuc( ), TARGET_AUC, 0.0001f );
 	}
 
-	void setupRiskFactors(ColumnData<unsigned int> *riskFactors)
+	void setupRiskFactors(ColumnData<unsigned char> *riskFactors)
 	{
 		for(unsigned int i = 0; i < NUM_COLUMNS; i++)
 		{
-			unsigned int *columnData = g_riskFactors[ i ];
-			std::vector<unsigned int> column( columnData, columnData + COLUMN_SIZE );
+			unsigned char *columnData = g_riskFactors[ i ];
+			std::vector<unsigned char> column( columnData, columnData + COLUMN_SIZE );
 			riskFactors->addColumn( column );
 		}
 	}

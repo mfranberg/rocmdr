@@ -39,7 +39,7 @@ float g_testColumns[NUM_COLUMNS][COLUMN_SIZE] = { {0.5, 2.2, 4.5, 1.2}, {-7.5, 0
 /**
  * The correct discretization for the columns above.
  */
-unsigned int g_targetColumns[NUM_COLUMNS][COLUMN_SIZE] = { {0, 1, 3, 0}, {0, 2, 3, 3} };
+unsigned char g_targetColumns[NUM_COLUMNS][COLUMN_SIZE] = { {0, 1, 3, 0}, {0, 2, 3, 3} };
 
 /**
  * Tests the functionality related to the discretizer.
@@ -55,7 +55,7 @@ public:
 		ColumnData<float> riskFactors;
 		addColumns( &riskFactors );
 
-		ColumnData<unsigned int> discretizedRiskFactors;
+		ColumnData<unsigned char> discretizedRiskFactors;
 		ColumnDiscretizer discretizer( NUM_INTERVALS );
 		discretizer.transform( riskFactors, &discretizedRiskFactors );
 		TS_ASSERT_EQUALS( discretizedRiskFactors.size( ), NUM_COLUMNS );
@@ -73,7 +73,7 @@ public:
 		ColumnData<float> singleColumnData;
 		singleColumnData.addColumn( singleColumn );
 
-		ColumnData<unsigned int> discretizedColumnData;
+		ColumnData<unsigned char> discretizedColumnData;
 		ColumnDiscretizer discretizer( NUM_INTERVALS );
 		discretizer.transform( singleColumnData, &discretizedColumnData );
 
@@ -105,11 +105,11 @@ public:
 	 *
 	 * @param columns A set of columns that has been discretized.
 	 */
-	void assertDiscretization(ColumnData<unsigned int> &columns)
+	void assertDiscretization(ColumnData<unsigned char> &columns)
 	{
 		for(unsigned int i = 0; i < NUM_COLUMNS; i++)
 		{
-			const std::vector<unsigned int> &column = columns.getColumn( i );
+			const std::vector<unsigned char> &column = columns.getColumn( i );
 			for(unsigned int j = 0; j < COLUMN_SIZE; j++)
 			{
 				TS_ASSERT_EQUALS( column[ j ], g_targetColumns[ i ][ j ] );

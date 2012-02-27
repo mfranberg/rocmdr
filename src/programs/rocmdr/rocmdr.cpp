@@ -5,8 +5,6 @@
 #include <ColumnData.h>
 #include <RocMdrAnalysis.h>
 
-#include "auc/NoAssociationSimulator.h"
-
 #include "parsing.h"
 #include "cmdline.h"
 
@@ -36,41 +34,16 @@ computeColumnRanges(ColumnData<unsigned int> &factors)
 }
 
 /**
- * Computes the p-values for a given vector of AUC values.
- *
- * @param factors A set of columns.
- * @param phenotypes A list of case/control classifications.
- * @param aucValues A list of AUC values to compute p-values for.
- *
- * @return A list of p-values corresponding to each AUC value.
- */
-std::vector<float>
-computePValues(ColumnData<unsigned int> &factors, const PhenotypeMapping &phenotypes, const std::vector<float> &aucValues)
-{
-	NoAssociationSimulator pValueSimulator( factors, phenotypes );
-
-	std::vector<float> pValues( aucValues.size( ), 0.0f );
-	for(unsigned int i = 0; i < aucValues.size( ); i++)
-	{
-		pValues[ i ] = pValueSimulator.computePValue( aucValues[ i ] );
-	}
-
-	return pValues;
-}
-
-/**
  * Outputs a set of AUC values and their corresponding p-values.
  *
- * @param aucValues List of AUC values.
  * @param pValues List of a p-value corresponding to each AUC value.
- *
  */
-void printAUCValues(const std::vector<float> &aucValues, const std::vector<float> &pValues)
+void printPValues(const std::vector<float> &pValues)
 {
     printf( "SNP\tAUC\tP-value\n" );
-    for(unsigned int i = 0; i < aucValues.size( ); i++)
+    for(unsigned int i = 0; i < pValues.size( ); i++)
     {
-        printf("%d\t%f\t%f\n", i, aucValues[ i ], pValues[ i ] );
+        printf("%d\t%f\n", i, pValues[ i ] );
     }
 }
 
@@ -108,21 +81,19 @@ int main(int argc, char **argv)
 	PhenotypeMapping phenotypeMapping( phenotypes );
 
 	// Compute AUC with each SNP
-	std::vector<float> aucValues;
+	std::vector<float> pValues;
 	for(unsigned int i = 0; i < genotypes.size( ); i++)
 	{
 		factors.addColumn( genotypes.getColumn( i ) );
 
-		RocMdrAnalysis mdrAnalyzer( factors, phenotypeMapping );
-		aucValues.push_back( mdrAnalyzer.calculateAuc( ) );
+		//RocMdrAnalysis mdrAnalyzer( factors, phenotypeMapping );
+		//pValues.push_back( mdrAnalyzer.getPValue( ) );
 
 		factors.removeColumnLast( );
 	}
 
-	// Print AUCs
-	std::vector<unsigned int> columnRanges = computeColumnRanges( factors );
-	std::vector<float> pValues = computePValues( factors, phenotypeMapping, aucValues );
-    printAUCValues( aucValues, pValues );
+	// Print P-values
+    printPValues( pValues );
 
     cmdline_parser_free( &argsInfo );
 

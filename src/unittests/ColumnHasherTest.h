@@ -29,7 +29,7 @@ static const unsigned int NUM_COLUMNS = 2;
  * Two columns for testing that two equal rows get
  * the same hash value.
  */
-unsigned int g_columns[NUM_COLUMNS][COLUMN_SIZE] = { {1,4,2,3,4,4}, {3,2,4,3,1,2} };
+unsigned char g_columns[NUM_COLUMNS][COLUMN_SIZE] = { {1,4,2,3,4,4}, {3,2,4,3,1,2} };
 
 /**
  * The two row indices that should have the same hash value.
@@ -46,8 +46,8 @@ public:
 	 */
 	void testSingleHash()
 	{
-		std::vector<unsigned int> column( 1,3 );
-		ColumnData<unsigned int> data;
+		std::vector<unsigned char> column( 1,3 );
+		ColumnData<unsigned char> data;
 		data.addColumn( column );
 
 		std::vector<ColumnHasher::hash_type> hashList;
@@ -63,11 +63,11 @@ public:
 	 */
 	void testTwoEqualHashes()
 	{
-		ColumnData<unsigned int> columns;
+		ColumnData<unsigned char> columns;
 		for(unsigned int i = 0; i < NUM_COLUMNS; i++)
 		{
-			unsigned int *columnData = g_columns[ i ];
-			std::vector<unsigned int> column( columnData, columnData + COLUMN_SIZE );
+			unsigned char *columnData = g_columns[ i ];
+			std::vector<unsigned char> column( columnData, columnData + COLUMN_SIZE );
 			columns.addColumn( column );
 		}
 

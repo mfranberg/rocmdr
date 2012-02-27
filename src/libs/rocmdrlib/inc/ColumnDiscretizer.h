@@ -14,7 +14,7 @@
  * the input data.
  */
 class ColumnDiscretizer
-: public ColumnTransformer<float, unsigned int>
+: public ColumnTransformer<float, unsigned char>
 {
 public:
 	/**
@@ -32,7 +32,7 @@ public:
 	 * @param after The discretized columns, the discretized columns will
 	 *              be added last.
 	 */
-	void transform(ColumnData<float> &before, ColumnData<unsigned int> *after);
+	void transform(ColumnData<float> &before, ColumnData<unsigned char> *after);
 
 private:
 	/**
@@ -47,7 +47,7 @@ private:
 	 */
 	void discretizeColumn(const std::vector<float> &column,
 						unsigned int numIntervals,
-						std::vector<unsigned int> *discretizedColumn);
+						std::vector<unsigned char> *discretizedColumn);
 
 	/**
 	 * The number of intervals to discretize each column into.

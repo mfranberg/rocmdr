@@ -51,6 +51,19 @@ public:
 		TS_ASSERT_EQUALS( mapping.isPositive( 0 ), true );
 		TS_ASSERT_EQUALS( mapping.isPositive( 1 ), false );
 	}
+
+	void testCopyConstructor()
+	{
+		std::vector<bool> phenotypes;
+		phenotypes.push_back( true );
+		phenotypes.push_back( false );
+
+		PhenotypeMapping mapping( phenotypes );
+		PhenotypeMapping mappingCopy( mapping );
+
+		TS_ASSERT_EQUALS( mapping.isPositive( 0 ), true );
+		TS_ASSERT_EQUALS( mapping.isPositive( 1 ), false );
+	}
 };
 
 #endif /* PHENOTYPEMAPPINGTEST_H_ */

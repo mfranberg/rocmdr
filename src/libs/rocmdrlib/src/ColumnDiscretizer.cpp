@@ -25,11 +25,11 @@ ColumnDiscretizer::ColumnDiscretizer(unsigned int numIntervals)
 
 }
 
-void ColumnDiscretizer::transform(ColumnData<float> &before, ColumnData<unsigned int> *after)
+void ColumnDiscretizer::transform(ColumnData<float> &before, ColumnData<unsigned char> *after)
 {
 	for(unsigned int i = 0; i < before.size( ); i++)
 	{
-		std::vector<unsigned int> discretizedColumn( before.numberOfRows( ), 0 );
+		std::vector<unsigned char> discretizedColumn( before.numberOfRows( ), 0 );
 		discretizeColumn( before.getColumn( i ), m_numIntervals, &discretizedColumn );
 		after->addColumn( discretizedColumn );
 	}
@@ -38,7 +38,7 @@ void ColumnDiscretizer::transform(ColumnData<float> &before, ColumnData<unsigned
 
 void ColumnDiscretizer::discretizeColumn(const std::vector<float> &column,
 					unsigned int numIntervals,
-					std::vector<unsigned int> *discretizedColumn)
+					std::vector<unsigned char> *discretizedColumn)
 {
 	if( discretizedColumn->size( ) != column.size( ) )
 	{

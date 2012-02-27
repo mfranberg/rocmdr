@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>rocmdr_unittests</name>
+	<name>rocmdr_snp</name>
 	<comment></comment>
 	<projects>
-		<project>cxxtest</project>
-		<project>rocmdrlib</project>
 		<project>libcsv</project>
-		<project>dense_hashmap</project>
+		<project>rocmdrlib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -27,7 +25,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value></value>
+					<value>-j</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -35,7 +33,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/rocmdr_unittests/Debug}</value>
+					<value>${workspace_loc:/rocmdr_snp/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>

@@ -1,1 +1,2 @@
 bld.recurse("rocmdr")
+bld.recurse("rocmdr_snp")

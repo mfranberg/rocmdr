@@ -42,6 +42,18 @@ public:
 	ColumnData(int maxSize = 0);
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param other Copy data from other.
+	 */
+	ColumnData(const ColumnData<T> &other);
+
+	/**
+	 * Assignment operator.
+	 */
+	ColumnData<T> & operator=(const ColumnData<T> &other);
+
+	/**
 	 * Adds the given column last.
 	 *
 	 * @param column The column to add.
@@ -104,6 +116,31 @@ template <class T>
 ColumnData<T>::ColumnData(int maxSize)
 {
 
+}
+
+template <class T>
+ColumnData<T>::ColumnData(const ColumnData<T> &other)
+{
+	for(unsigned int i = 0; i < other.m_columns.size( ); i++)
+	{
+		m_columns.push_back( other.m_columns[ i ] );
+	}
+}
+template <class T>
+ColumnData<T> &
+ColumnData<T>::operator=(const ColumnData<T> &other)
+{
+	if( this != &other )
+	{
+		m_columns.clear( );
+
+		for(unsigned int i = 0; i < other.m_columns.size( ); i++)
+		{
+			m_columns.push_back( other.m_columns[ i ] );
+		}
+	}
+
+	return *this;
 }
 
 template <class T>
@@ -184,7 +221,7 @@ ColumnData<T>::numberOfRows()
 	}
 	else
 	{
-		return m_columns[0].size( );
+		return m_columns[ 0 ].size( );
 	}
 }
 

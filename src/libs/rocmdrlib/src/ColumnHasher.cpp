@@ -14,14 +14,14 @@
 #include <ColumnHasher.h>
 
 void
-ColumnHasher::hash(ColumnData<unsigned int> &data, std::vector<hash_type> *hashList)
+ColumnHasher::hash(ColumnData<ColumnHasher::column_type> &data, std::vector<hash_type> *hashList)
 {
 	hashList->resize( data.numberOfRows( ), 0 );
 	unsigned int totalNumberOfBits = 0;
 
 	for(unsigned int i = 0; i < data.size( ); i++)
 	{
-		std::vector<unsigned int> column = data.getColumn( i );
+		std::vector<ColumnHasher::column_type> column = data.getColumn( i );
 		unsigned int bitsRequired = numBitsForColumn( column );
 		totalNumberOfBits += bitsRequired;
 
@@ -35,7 +35,7 @@ ColumnHasher::hash(ColumnData<unsigned int> &data, std::vector<hash_type> *hashL
 }
 
 void
-ColumnHasher::hashColumn(const std::vector<unsigned int> &column, std::vector<hash_type> *hashList, unsigned int numBits)
+ColumnHasher::hashColumn(const std::vector<ColumnHasher::column_type> &column, std::vector<hash_type> *hashList, unsigned int numBits)
 {
 	for(unsigned int i = 0; i < column.size( ); i++)
 	{
@@ -48,7 +48,7 @@ ColumnHasher::hashColumn(const std::vector<unsigned int> &column, std::vector<ha
 }
 
 unsigned int
-ColumnHasher::numBitsForColumn(const std::vector<unsigned int> &column)
+ColumnHasher::numBitsForColumn(const std::vector<ColumnHasher::column_type> &column)
 {
 	unsigned int max = *std::max_element( column.begin( ), column.end( ) );
 	return ceilf( log2f( (float) max ) ) + 1;

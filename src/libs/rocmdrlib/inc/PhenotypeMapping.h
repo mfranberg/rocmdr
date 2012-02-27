@@ -18,10 +18,29 @@ class PhenotypeMapping
 public:
 	/**
 	 * Constructor.
+	 */
+	PhenotypeMapping();
+
+	/**
+	 * Constructor.
 	 *
 	 * @param phenotypes The phenotypes.
 	 */
 	PhenotypeMapping(const std::vector<bool> &phenotypes);
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param other Other mapping to initialize from.
+	 */
+	PhenotypeMapping(const PhenotypeMapping &other);
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param other Other object to assign to this.
+	 */
+	PhenotypeMapping & operator=(const PhenotypeMapping &other);
 
 	/**
 	 * Returns the number of positive samples.
@@ -64,7 +83,7 @@ private:
 	/**
 	 * The phenotypes.
 	 */
-	const std::vector<bool> &m_phenotypes;
+	std::vector<bool> m_phenotypes;
 };
 
 #endif /* PHENOTYPEMAPPING_H_ */

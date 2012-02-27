@@ -24,10 +24,14 @@ def options(opt):
 def configure(conf):
     from waflib import Options
     conf.load('compiler_cxx')
+    conf.check( lib='plinkio',
+                mandatory=True, 
+                uselib_store='plinkio' )
 
     configure_cxxtest(conf)
 
-    conf.env['CXXFLAGS'] = ["-Wall", "-pedantic", "-Wno-long-long"]
+    conf.env['CXXFLAGS'] = ["-Wall", "-pedantic", "-Wno-long-long", "-fopenmp"]
+    conf.env['LINKFLAGS'] = ["-fopenmp"]
     if "debug" in Options.commands:
         conf.env.append_value('CXXFLAGS', "-g")
         Options.commands.remove("debug")
