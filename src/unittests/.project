@@ -3,8 +3,8 @@
 	<name>rocmdr_unittests</name>
 	<comment></comment>
 	<projects>
-		<project>cxxtest</project>
-		<project>rocmdrlib</project>
+		<project>libcxxtest</project>
+		<project>librocmdr</project>
 		<project>libcsv</project>
 		<project>dense_hashmap</project>
 	</projects>

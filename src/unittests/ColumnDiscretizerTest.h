@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#include <ColumnData.h>
-#include <ColumnDiscretizer.h>
+#include <data/ColumnData.h>
+#include <data/ColumnDiscretizer.h>
 
 #include <cxxtest/TestSuite.h>
 

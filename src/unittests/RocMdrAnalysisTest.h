@@ -8,8 +8,8 @@
 #ifndef ROCMDRANALYSISTEST_H_
 #define ROCMDRANALYSISTEST_H_
 
-#include <ColumnData.h>
-#include <PhenotypeMapping.h>
+#include <data/ColumnData.h>
+#include <data/PhenotypeMapping.h>
 #include <RocMdrAnalysis.h>
 
 #include <cxxtest/TestSuite.h>

@@ -10,6 +10,7 @@
 #include <RocMdrBatch.h>
 #include <RocMdrRestrictedBatch.h>
 
+#include "RestrictReader.h"
 #include "plink/PlinkIo.h"
 #include "cmdline.h"
 

@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include <PhenotypeMapping.h>
+#include <data/PhenotypeMapping.h>
 
 #include <cxxtest/TestSuite.h>
 

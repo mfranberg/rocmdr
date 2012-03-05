@@ -17,7 +17,7 @@ RestrictReader::RestrictReader(const char *path)
 std::set<std::string>
 RestrictReader::readSet()
 {
-	std::ifstream restrictFile( m_path );
+	std::ifstream restrictFile( m_path.c_str( ) );
 
 	std::set<std::string> restrictSet;
 	while( restrictFile.good( ) )

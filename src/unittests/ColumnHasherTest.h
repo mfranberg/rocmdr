@@ -10,8 +10,8 @@
 
 #include <vector>
 
-#include <ColumnData.h>
-#include <ColumnHasher.h>
+#include <data/ColumnData.h>
+#include <data/ColumnHasher.h>
 
 #include <cxxtest/TestSuite.h>
 
