@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <set>
+#include <vector>
 
 #include <stdlib.h>
 
@@ -6,9 +8,52 @@
 #include <RocMdrAnalysis.h>
 #include <RocMdrResult.h>
 #include <RocMdrBatch.h>
+#include <RocMdrRestrictedBatch.h>
 
 #include "plink/PlinkIo.h"
 #include "cmdline.h"
+
+/**
+ * Converts the names in the restrict set to a list of
+ * indices in the loci array.
+ *
+ * @param restrictSet Set of loci to be converted to indices.
+ * @param plinkIo The plink file that contains all loci.
+ *
+ * @return A list of indices corresponding to the given loci names.
+ */
+std::vector<unsigned int>
+namesToIndices(const std::set<std::string> &restrictSet, PlinkIo &plinkIo)
+{
+	std::vector<unsigned int> lociAsIndices;
+	unsigned int numLoci = plinkIo.getSnps( ).size( );
+	for(unsigned int i = 0; i < numLoci; i++)
+	{
+		if( restrictSet.count( plinkIo.getLocus( i ) ) > 0 )
+		{
+			lociAsIndices.push_back( i );
+		}
+	}
+
+	return lociAsIndices;
+}
+
+/**
+ * Convenience function that reads the restrict loci
+ * from a file, converts them to indices and returns
+ * the list of indices.
+ *
+ * @param restrictPath Path to the restrict file.
+ * @param plinkIo The plink file that contains all loci.
+ *
+ * @param A list of indices corresponding to the given loci names.
+ */
+std::vector<unsigned int>
+readRestrictIndices(const char *restrictPath, PlinkIo &plinkIo)
+{
+	RestrictReader reader( restrictPath );
+	return namesToIndices( reader.readSet( ), plinkIo );
+}
 
 /**
  * Outputs the AUC and P-value for each result, and the loci
@@ -42,7 +87,7 @@ int main(int argc, char **argv)
 	gengetopt_args_info argsInfo;
 	if( cmdline_parser( argc, argv, &argsInfo ) != 0 )
 	{
-		exit( -1 );
+		exit( EXIT_FAILURE );
 	}
 
 	if( argsInfo.inputs_num != 1 )
@@ -57,8 +102,24 @@ int main(int argc, char **argv)
 	ColumnData<unsigned char> snps = plinkIo.getSnps( );
 	PhenotypeMapping phenotypes( plinkIo.getPhenotypes( ) );
 
-	RocMdrBatch batch;
-	std::vector<RocMdrResult> results = batch.run( argsInfo.interaction_order_arg, snps, phenotypes );
+	std::vector<RocMdrResult> results;
+	if( !argsInfo.restrict_file_given )
+	{
+		RocMdrBatch batch;
+		results = batch.run( argsInfo.interaction_order_arg, snps, phenotypes );
+	}
+	else
+	{
+		std::vector<unsigned int> restrictIndices = readRestrictIndices( argsInfo.restrict_file_arg, plinkIo );
+		if( restrictIndices.size( ) == 0 )
+		{
+			printf( "rocmdr: no restrict set found in %s\n", argsInfo.restrict_file_arg );
+			exit( EXIT_FAILURE );
+		}
+
+		RocMdrRestrictedBatch batch( argsInfo.interaction_order_arg );
+		results = batch.run( restrictIndices, snps, phenotypes );
+	}
 
     printPValues( plinkIo, results );
 

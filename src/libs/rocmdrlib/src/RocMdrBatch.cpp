@@ -9,47 +9,37 @@
 #include <RocMdrBatch.h>
 
 void
-RocMdrBatch::runRocMdrRecursive(unsigned int maxLevel,
-					   ColumnData<unsigned char> &allSnps,
-					   PhenotypeMapping &phenotypes,
-					   ColumnData<unsigned char> &curSnps,
-					   std::vector<unsigned int> &curLoci,
-					   std::vector<RocMdrResult> *results)
+RocMdrBatch::runRocMdrRecursive(RecursionState &state,
+		   	   	   	   	   	    ColumnData<unsigned char> &snps,
+		   	   	   	   	   	    PhenotypeMapping &phenotypes,
+		   	   	   	   	   	    std::vector<RocMdrResult> *results)
 {
-	unsigned int start = 0;
-	if( curLoci.size( ) > 0 )
+	if( state.done( ) )
 	{
-		start = curLoci.back( ) + 1;
-	}
-
-	if( curSnps.size( ) == maxLevel - 1 )
-	{
-		for(unsigned int i = start; i < allSnps.size( ); i++)
+		for(unsigned int i = state.nextIndex( ); i < snps.size( ); i++)
 		{
-			curSnps.addColumn( allSnps.getColumn( i ) );
-			curLoci.push_back( i );
+			state.push( i );
 
-			RocMdrAnalysis rocMdr( curSnps, phenotypes );
+			RocMdrAnalysis rocMdr( state.getCurrentSnps( ), phenotypes );
 			float auc = rocMdr.getAuc( );
-			RocMdrResult result( curLoci, auc, m_nullSimulator.computePValue( auc ) );
+			RocMdrResult result( state.getCurrentIndices( ),
+								 auc,
+								 m_nullSimulator.computePValue( auc ) );
 
 			results->push_back( result );
 
-			curLoci.pop_back( );
-			curSnps.removeColumnLast( );
+			state.pop( );
 		}
 	}
 	else
 	{
-		for(unsigned int i = start; i < allSnps.size( ); i++)
+		for(unsigned int i = state.nextIndex( ); i < snps.size( ); i++)
 		{
-			curSnps.addColumn( allSnps.getColumn( i ) );
-			curLoci.push_back( i );
+			state.push( i );
 
-			runRocMdrRecursive( maxLevel, allSnps, phenotypes, curSnps, curLoci, results );
+			runRocMdrRecursive( state, snps, phenotypes, results );
 
-			curLoci.pop_back( );
-			curSnps.removeColumnLast( );
+			state.pop( );
 		}
 	}
 }
@@ -60,13 +50,12 @@ RocMdrBatch::run(unsigned int interactionOrder,
 					  PhenotypeMapping phenotypes)
 {
 	std::vector<RocMdrResult> results;
-	ColumnData<unsigned char> empty;
-	std::vector<unsigned int> loci;
 
 	m_nullSimulator.setData( snps, phenotypes.getPhenotypes( ) );
 	m_nullSimulator.setOrder( interactionOrder );
 
-	runRocMdrRecursive( interactionOrder, snps, phenotypes, empty, loci, &results );
+	RecursionState state( interactionOrder - 1, snps );
+	runRocMdrRecursive( state, snps, phenotypes, &results );
 
 	return results;
 }

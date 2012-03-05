@@ -42,6 +42,9 @@ struct gengetopt_args_info
   int interaction_order_arg;	/**< @brief Interaction order. (default='1').  */
   char * interaction_order_orig;	/**< @brief Interaction order. original value given at command line.  */
   const char *interaction_order_help; /**< @brief Interaction order. help description.  */
+  char * restrict_file_arg;	/**< @brief List of SNPs that the analysis is restricted to..  */
+  char * restrict_file_orig;	/**< @brief List of SNPs that the analysis is restricted to. original value given at command line.  */
+  const char *restrict_file_help; /**< @brief List of SNPs that the analysis is restricted to. help description.  */
   char * output_file_arg;	/**< @brief Saves the output to a file instead..  */
   char * output_file_orig;	/**< @brief Saves the output to a file instead. original value given at command line.  */
   const char *output_file_help; /**< @brief Saves the output to a file instead. help description.  */
@@ -51,6 +54,7 @@ struct gengetopt_args_info
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
   unsigned int interaction_order_given ;	/**< @brief Whether interaction-order was given.  */
+  unsigned int restrict_file_given ;	/**< @brief Whether restrict-file was given.  */
   unsigned int output_file_given ;	/**< @brief Whether output-file was given.  */
   unsigned int verbose_given ;	/**< @brief Whether verbose was given.  */
 
