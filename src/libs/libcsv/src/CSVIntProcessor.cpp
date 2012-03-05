@@ -4,6 +4,7 @@
  *  Created on: Sep 20, 2011
  *      Author: fmattias
  */
+#include <cstdio>
 #include <stdexcept>
 
 #include "CSVIntProcessor.h"
@@ -25,7 +26,7 @@ CSVIntProcessor::onField(const std::string &field)
 {
 	int fieldAsInt;
 	int charactersUsed;
-	int numScannedElements = sscanf( field.c_str( ), "%d%n", &fieldAsInt, &charactersUsed );
+	int numScannedElements = std::sscanf( field.c_str( ), "%d%n", &fieldAsInt, &charactersUsed );
 	if( numScannedElements == 1 && charactersUsed == (int) field.size( ) )
 	{
 		m_currentRow.push_back( fieldAsInt );

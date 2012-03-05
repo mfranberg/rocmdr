@@ -57,7 +57,7 @@ void ColumnDiscretizer::discretizeColumn(const std::vector<float> &column,
 	{
 		if( column[ i ] != maxElement )
 		{
-			(*discretizedColumn)[ i ] = ((offset + column[ i ]) / intervalSize);
+			(*discretizedColumn)[ i ] = (unsigned int) ((offset + column[ i ]) / intervalSize);
 		}
 		else
 		{
