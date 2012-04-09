@@ -4,53 +4,44 @@
  *  Created on: Feb 16, 2012
  *      Author: fmattias
  */
+#include <RestrictFilter.h>
+#include <RocMdrBatch.h>
 #include <RocMdrAnalysis.h>
 
 #include <RocMdrRestrictedBatch.h>
 
-RocMdrRestrictedBatch::RocMdrRestrictedBatch(unsigned int order)
-: m_order( order )
+RocMdrRestrictedBatch::RocMdrRestrictedBatch(const std::vector<unsigned int> &restricted)
+: RocMdrBatch::RocMdrBatch( ),
+  m_restricted( restricted )
 {
-	m_order = order;
+
 }
 
 void
 RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
-		   	   	   	   	   	   	   	   	  std::vector<unsigned int> &restricted,
 		   	   	   	   	   	   	   	   	  ColumnData<unsigned char> &snps,
 		   	   	   	   	   	   	   	   	  PhenotypeMapping &phenotypes,
 		   	   	   	   	   	   	   	   	  std::vector<RocMdrResult> *results)
 {
 	if( state.done( ) )
 	{
-		std::set<unsigned int> restrictedSet( restricted.begin( ), restricted.end( ) );
-
-		for(unsigned int i = 0; i < snps.size( ); i++)
+		RestrictFilter filter( m_restricted );
+		if( getNumThreads( ) <= 1 || snps.size( ) < getNumThreads( ) )
 		{
-			if( restrictedSet.count( i ) > 0 )
-			{
-				continue;
-			}
-
-			state.push( i );
-
-			RocMdrAnalysis rocMdr( state.getCurrentSnps( ), phenotypes );
-			float auc = rocMdr.getAuc( );
-
-			RocMdrResult result( state.getCurrentIndices( ), auc, m_nullSimulator.computePValue( auc ) );
-
-			results->push_back( result );
-
-			state.pop( );
+			runSingle( 0, snps.size( ), state, &filter, phenotypes, results );
+		}
+		else
+		{
+			runParallell( 0, snps.size( ), state, &filter, phenotypes, results, getNumThreads( ) );
 		}
 	}
 	else
 	{
-		for(unsigned int i = state.nextIndex( ); i < restricted.size( ); i++)
+		for(unsigned int i = state.nextIndex( ); i < m_restricted.size( ); i++)
 		{
-			state.push( restricted[ i ], i );
+			state.push( m_restricted[ i ], i );
 
-			runRocMdrRecursive( state, restricted, snps, phenotypes, results );
+			runRocMdrRecursive( state, snps, phenotypes, results );
 
 			state.pop( );
 		}
@@ -58,18 +49,15 @@ RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
 }
 
 std::vector<RocMdrResult>
-RocMdrRestrictedBatch::run(std::vector<unsigned int> restricted,
+RocMdrRestrictedBatch::run(unsigned int interactionOrder,
 		  	     ColumnData<unsigned char> snps,
 		  	     PhenotypeMapping phenotypes)
 {
 	std::vector<RocMdrResult> results;
 
-	m_nullSimulator.setData( snps, phenotypes.getPhenotypes( ) );
-	m_nullSimulator.setOrder( m_order + 1 );
-	m_nullSimulator.setNumberOfSamples( restricted.size( ) * snps.size( ) );
+	RecursionState state( interactionOrder + 1, snps );
 
-	RecursionState state( m_order, snps );
-	runRocMdrRecursive( state, restricted, snps, phenotypes, &results );
+	runRocMdrRecursive( state, snps, phenotypes, &results );
 
 	return results;
 }

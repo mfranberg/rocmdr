@@ -12,6 +12,7 @@
 #include <data/ColumnHasher.h>
 #include <RocMdrAnalysis.h>
 
+#include <climits>
 #include <cmath>
 #include <util/normal.h>
 
@@ -119,7 +120,7 @@ RocMdrAnalysis::countSamplesInEachCell(const PhenotypeMapping &phenotypes,
 							  const std::vector<ColumnHasher::hash_type> &hashList,
 							  google::dense_hash_map<ColumnHasher::hash_type, Cell> *cellCounter)
 {
-	cellCounter->set_empty_key( ULONG_LONG_MAX );
+	cellCounter->set_empty_key( ULONG_MAX );
 
 	for(unsigned int i = 0; i < hashList.size( ); i++)
 	{

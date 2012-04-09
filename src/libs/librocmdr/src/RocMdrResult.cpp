@@ -25,7 +25,8 @@ RocMdrResult::RocMdrResult(const RocMdrResult &other)
 }
 
 
-RocMdrResult & RocMdrResult::operator=(const RocMdrResult &other)
+RocMdrResult &
+RocMdrResult::operator=(const RocMdrResult &other)
 {
 	if( this != &other )
 	{
@@ -37,6 +38,12 @@ RocMdrResult & RocMdrResult::operator=(const RocMdrResult &other)
 	}
 
 	return *this;
+}
+
+bool
+RocMdrResult::operator<(const RocMdrResult& other) const
+{
+	return m_auc < other.m_auc;
 }
 
 void

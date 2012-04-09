@@ -10,13 +10,32 @@
 
 #include <vector>
 
+#include <Filter.h>
 #include <RecursionState.h>
 #include <RocMdrResult.h>
-#include <stat/NoAssociationSimulator.h>
+#include <stat/NullInteraction.h>
 
 class RocMdrBatch
 {
 public:
+	/**
+	 * Constructor.
+	 */
+	RocMdrBatch();
+
+	/**
+	 * Sets the number of threads to use.
+	 */
+	void setNumThreads(unsigned int numThreads);
+
+	/**
+	 * Returns the number of threads to use when
+	 * executing the batch.
+	 *
+	 * @return the number of threads to use.
+	 */
+	unsigned int getNumThreads();
+
 	/**
 	 * Recursively computes the AUC for all possible
 	 * tables of the given interaction order.
@@ -28,9 +47,9 @@ public:
 	 * @return List of results that contains the AUC for each table
 	 *         of the given order.
 	 */
-	std::vector<RocMdrResult> run(unsigned int interactionOrder,
-									   ColumnData<unsigned char> snps,
-									   PhenotypeMapping phenotypes);
+	virtual std::vector<RocMdrResult> run(unsigned int interactionOrder,
+								          ColumnData<unsigned char> snps,
+								          PhenotypeMapping phenotypes);
 
 private:
 	/**
@@ -52,10 +71,48 @@ private:
 					   std::vector<RocMdrResult> *results);
 
 	/**
-	 * Simulates the AUC under the null hypothesis.
+	 * The number of threads to use.
 	 */
-	NoAssociationSimulator m_nullSimulator;
+	unsigned int m_numThreads;
 };
+
+/**
+ * Computes the last step of the recursion in multiple threads.
+ *
+ * @param start The index of the first SNP.
+ * @param end The index of the last SNP.
+ * @param state Recursion state.
+ * @param filter SNPs to filter out.
+ * @param phenotypes The phenotypes.
+ * @param results List of results.
+ * @param numThreads The number of threads.
+ */
+void
+runParallell(unsigned int start,
+			 unsigned int end,
+			 RecursionState &state,
+			 Filter *filter,
+		   	 PhenotypeMapping &phenotypes,
+		   	 std::vector<RocMdrResult> *results,
+		   	 unsigned int numThreads);
+
+/**
+ * Computes the last step of the recursion in a single thread.
+ *
+ * @param start The index of the first SNP.
+ * @param end The index of the last SNP.
+ * @param state Recursion state.
+ * @param filter SNPs to filter out.
+ * @param phenotypes The phenotypes.
+ * @param results List of results.
+ */
+void
+runSingle(unsigned int start,
+		  unsigned int end,
+		  RecursionState state,
+		  Filter *filter,
+		  PhenotypeMapping &phenotypes,
+		  std::vector<RocMdrResult> *results);
 
 
 #endif /* ROCMDRBATCH_H_ */

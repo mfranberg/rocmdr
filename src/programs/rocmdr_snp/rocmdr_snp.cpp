@@ -12,7 +12,7 @@
 
 #include "RestrictReader.h"
 #include "plink/PlinkIo.h"
-#include "cmdline.h"
+#include "rocmdr_snp_ggo.h"
 
 /**
  * Converts the names in the restrict set to a list of
@@ -103,13 +103,8 @@ int main(int argc, char **argv)
 	ColumnData<unsigned char> snps = plinkIo.getSnps( );
 	PhenotypeMapping phenotypes( plinkIo.getPhenotypes( ) );
 
-	std::vector<RocMdrResult> results;
-	if( !argsInfo.restrict_file_given )
-	{
-		RocMdrBatch batch;
-		results = batch.run( argsInfo.interaction_order_arg, snps, phenotypes );
-	}
-	else
+	RocMdrBatch batch;
+	if( argsInfo.restrict_file_given )
 	{
 		std::vector<unsigned int> restrictIndices = readRestrictIndices( argsInfo.restrict_file_arg, plinkIo );
 		if( restrictIndices.size( ) == 0 )
@@ -118,9 +113,12 @@ int main(int argc, char **argv)
 			exit( EXIT_FAILURE );
 		}
 
-		RocMdrRestrictedBatch batch( argsInfo.interaction_order_arg );
-		results = batch.run( restrictIndices, snps, phenotypes );
+		batch = RocMdrRestrictedBatch( restrictIndices );
 	}
+
+	std::vector<RocMdrResult> results;
+	batch.setNumThreads( argsInfo.num_threads_arg );
+	results = batch.run( argsInfo.interaction_order_arg, snps, phenotypes );
 
     printPValues( plinkIo, results );
 

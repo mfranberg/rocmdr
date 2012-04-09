@@ -27,6 +27,20 @@ public:
 	RecursionState(unsigned int maxDepth, ColumnData<unsigned char> &snps);
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param other Other state to initialize from.
+	 */
+	RecursionState(const RecursionState &other);
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param other Other object to assign to this.
+	 */
+	RecursionState & operator=(const RecursionState &other);
+
+	/**
 	 * Pushes a SNP to the recursion state.
 	 *
 	 * @param index Index to a column in the SNPs.

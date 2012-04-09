@@ -15,5 +15,6 @@ section "Arguments"
 section "Parameters"
 	option "interaction-order" k "Interaction order." int default="1" optional
 	option "restrict-file" r "List of SNPs that the analysis is restricted to." string typestr="filename" optional
+	option "num-threads" j "Number of threads to use." int default="1" optional
 	option "output-file" f "Saves the output to a file instead." string typestr="filename" optional
 	option "verbose" v "Outputs extra information during run." flag off

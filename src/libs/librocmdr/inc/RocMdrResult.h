@@ -71,6 +71,11 @@ public:
 	 */
 	float getAuc() const;
 
+	/**
+	 * Compares the AUC of the results.
+	 */
+	bool operator<(const RocMdrResult& other) const;
+
 private:
 	/**
 	 * The loci for which the interaction was

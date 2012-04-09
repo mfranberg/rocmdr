@@ -13,6 +13,31 @@ RecursionState::RecursionState(unsigned int maxDepth, ColumnData<unsigned char> 
 
 }
 
+RecursionState::RecursionState(const RecursionState &other)
+: m_maxDepth( other.m_maxDepth ),
+  m_snps( other.m_snps ),
+  m_curSnps( other.m_curSnps ),
+  m_curIndex( other.m_curIndex ),
+  m_lastIndex( other.m_lastIndex )
+{
+
+}
+
+RecursionState &
+RecursionState::operator=(const RecursionState &other)
+{
+	if( this != &other )
+	{
+		m_maxDepth = other.m_maxDepth;
+		m_snps = other.m_snps;
+		m_curSnps = other.m_curSnps;
+		m_curIndex.assign( other.m_curIndex.begin( ), other.m_curIndex.end( ) );
+		m_lastIndex.assign( other.m_lastIndex.begin( ), other.m_lastIndex.end( ) );
+	}
+
+	return *this;
+}
+
 void
 RecursionState::push(unsigned int index)
 {
@@ -64,5 +89,5 @@ RecursionState::nextIndex()
 bool
 RecursionState::done()
 {
-	return m_curSnps.size( ) >= m_maxDepth;
+	return m_curSnps.size( ) >= m_maxDepth - 1;
 }
