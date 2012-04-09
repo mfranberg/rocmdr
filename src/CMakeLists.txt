@@ -10,6 +10,7 @@ set( ROCMDR_VERSION_PATCH 0 )
 set( LIBCSV_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/libcsv/inc/" )
 set( DENSE_HASHMAP_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/dense_hashmap/" )
 set( LIBROCMDR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/librocmdr/inc/" )
+set( LIBCPPTHREAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/libs/libcppthread/" )
 
 enable_testing( )
 set( CXXTEST_PERL_TESTGEN_EXECUTABLE "${PROJECT_SOURCE_DIR}/libs/libcxxtest/cxxtestgen.pl" )
