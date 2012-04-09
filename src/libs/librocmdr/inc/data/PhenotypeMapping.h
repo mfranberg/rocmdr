@@ -62,6 +62,20 @@ public:
 	const std::vector<bool> & getPhenotypes() const;
 
 	/**
+	 * Returns a list of positive indices.
+	 *
+	 * @return a list of positive indices.
+	 */
+	std::vector<unsigned int> getPositiveIndices() const;
+
+	/**
+	 * Returns a list of negative indices.
+	 *
+	 * @return a list of negative indices.
+	 */
+	std::vector<unsigned int> getNegativeIndices() const;
+
+	/**
 	 * Returns true if the sample with the given index
 	 * is regarded as positive.
 	 *
@@ -84,6 +98,16 @@ private:
 	 * The phenotypes.
 	 */
 	std::vector<bool> m_phenotypes;
+
+	/**
+	 * List of positive indices.
+	 */
+	std::vector<unsigned int> m_positive;
+
+	/**
+	 * List of negative indices.
+	 */
+	std::vector<unsigned int> m_negative;
 };
 
 #endif /* PHENOTYPEMAPPING_H_ */
