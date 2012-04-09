@@ -33,7 +33,7 @@ public:
 	 * The type used for the hashed values. You can always
 	 * assume that this will support the operators < and =.
 	 */
-	typedef unsigned long long hash_type;
+	typedef unsigned long hash_type;
 
 	/**
 	 * Hashes the given set of columns, such that each row
