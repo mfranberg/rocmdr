@@ -20,7 +20,7 @@ RocMdrAnalysis::RocMdrAnalysis(ColumnData<RocMdrAnalysis::column_type> &data, co
 : m_data( data ),
   m_phenotypes( phenotypes )
 {
-
+	assert( data.numberOfRows( ) == phenotypes.size( ) );
 }
 
 float

@@ -26,24 +26,24 @@ public:
 	 * @param order Number of SNPs considered jointly from the
 	 *              restricted set
 	 */
-	RocMdrRestrictedBatch(const std::vector<unsigned int> &restricted);
+	RocMdrRestrictedBatch(ColumnData<unsigned char> snps, PhenotypeMapping phenotypes, const std::vector<unsigned int> &restricted);
 
 	/**
 	 * Recursively computes the AUC for all possible
 	 * tables of the given interaction order where each interaction
-	 * is restricted contain one of the SNPs in the restrict set.
+	 * is restricted contain one of the SNPs in the restricted set.
 	 *
-	 * @param restricted List of restricted SNPs.
-	 * @param snps All SNPs such that each column contains the SNPs for
-	 *             a single loci.
-	 * @param phenotypes Disease status of the individuals.
+	 * @param interactionOrder Number of SNPs in each interaction for
+	 *                         the restricted set.
+	 *                         1 = One snp from the restricted set, together
+	 *                             with one from the others.
+	 *                         2 = Pairs from the restricted set, together
+	 *                             with one from the others.
 	 *
 	 * @return List of results that contains the AUC for each table
 	 *         of the given order.
 	 */
-	std::vector<RocMdrResult> run(unsigned int interactionOrder,
-								  ColumnData<unsigned char> snps,
-								  PhenotypeMapping phenotypes);
+	std::vector<RocMdrResult> run(unsigned int interactionOrder);
 
 private:
 	/**
@@ -59,8 +59,6 @@ private:
 	 */
 	void
 	runRocMdrRecursive(RecursionState &state,
-					   ColumnData<unsigned char> &snps,
-					   PhenotypeMapping &phenotypes,
 					   std::vector<RocMdrResult> *results);
 
 	/**

@@ -10,8 +10,8 @@
 
 #include <RocMdrRestrictedBatch.h>
 
-RocMdrRestrictedBatch::RocMdrRestrictedBatch(const std::vector<unsigned int> &restricted)
-: RocMdrBatch::RocMdrBatch( ),
+RocMdrRestrictedBatch::RocMdrRestrictedBatch(ColumnData<unsigned char> snps, PhenotypeMapping phenotypes, const std::vector<unsigned int> &restricted)
+: RocMdrBatch::RocMdrBatch( snps, phenotypes ),
   m_restricted( restricted )
 {
 
@@ -19,20 +19,17 @@ RocMdrRestrictedBatch::RocMdrRestrictedBatch(const std::vector<unsigned int> &re
 
 void
 RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
-		   	   	   	   	   	   	   	   	  ColumnData<unsigned char> &snps,
-		   	   	   	   	   	   	   	   	  PhenotypeMapping &phenotypes,
 		   	   	   	   	   	   	   	   	  std::vector<RocMdrResult> *results)
 {
 	if( state.done( ) )
 	{
-		RestrictFilter filter( m_restricted );
-		if( getNumThreads( ) <= 1 || snps.size( ) < getNumThreads( ) )
+		if( getNumThreads( ) <= 1 || getSnps( ).size( ) < getNumThreads( ) )
 		{
-			runSingle( 0, snps.size( ), state, &filter, phenotypes, results );
+			runSingle( 0, getSnps( ).size( ), state, results );
 		}
 		else
 		{
-			runParallell( 0, snps.size( ), state, &filter, phenotypes, results, getNumThreads( ) );
+			runParallell( 0, getSnps( ).size( ), state, results );
 		}
 	}
 	else
@@ -41,7 +38,7 @@ RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
 		{
 			state.push( m_restricted[ i ], i );
 
-			runRocMdrRecursive( state, snps, phenotypes, results );
+			runRocMdrRecursive( state, results );
 
 			state.pop( );
 		}
@@ -49,15 +46,15 @@ RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
 }
 
 std::vector<RocMdrResult>
-RocMdrRestrictedBatch::run(unsigned int interactionOrder,
-		  	     ColumnData<unsigned char> snps,
-		  	     PhenotypeMapping phenotypes)
+RocMdrRestrictedBatch::run(unsigned int interactionOrder)
 {
 	std::vector<RocMdrResult> results;
 
+	ColumnData<unsigned char> snps = getSnps( );
 	RecursionState state( interactionOrder + 1, snps );
 
-	runRocMdrRecursive( state, snps, phenotypes, &results );
+	setFilter( new RestrictFilter( m_restricted ) );
+	runRocMdrRecursive( state, &results );
 
 	return results;
 }

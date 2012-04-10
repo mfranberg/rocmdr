@@ -13,10 +13,21 @@
 
 #include <RocMdrBatch.h>
 
-RocMdrBatch::RocMdrBatch()
-: m_numThreads( 1 )
+RocMdrBatch::RocMdrBatch(ColumnData<unsigned char> snps, PhenotypeMapping phenotypes)
+:	m_snps( snps ),
+ 	m_phenotypes( phenotypes ),
+ 	m_filter( NULL ),
+	m_numThreads( 1 )
 {
 
+}
+
+RocMdrBatch::~RocMdrBatch()
+{
+	if( m_filter != NULL )
+	{
+		delete m_filter;
+	}
 }
 
 void
@@ -31,29 +42,44 @@ RocMdrBatch::getNumThreads()
 	return m_numThreads;
 }
 
+ColumnData<unsigned char>
+RocMdrBatch::getSnps()
+{
+	return m_snps;
+}
+
 void
-runSingle(unsigned int start,
-		  unsigned int end,
-		  RecursionState state,
-		  Filter *filter,
-		  PhenotypeMapping &phenotypes,
-		  std::vector<RocMdrResult> *results)
+RocMdrBatch::setFilter(Filter *filter)
+{
+	if( m_filter != NULL )
+	{
+		delete m_filter;
+	}
+
+	m_filter = filter;
+}
+
+void
+RocMdrBatch::runSingle(unsigned int start,
+		  	  	  	   unsigned int end,
+		  	  	  	   RecursionState state,
+		  	  	  	   std::vector<RocMdrResult> *results)
 {
 	NullInteraction nullSimulator( 100 );
 
 	for(unsigned int i = start; i < end; i++)
 	{
-		if( filter->skip( i ) )
+		if( m_filter != NULL && m_filter->skip( i ) )
 		{
 			continue;
 		}
 
 		state.push( i );
 
-		RocMdrAnalysis rocMdr( state.getCurrentSnps( ), phenotypes );
+		RocMdrAnalysis rocMdr( state.getCurrentSnps( ), m_phenotypes );
 
 		float auc = rocMdr.getAuc( );
-		float pValue = nullSimulator.getPValue( auc, state.getCurrentSnps( ), phenotypes );
+		float pValue = nullSimulator.getPValue( auc, state.getCurrentSnps( ), m_phenotypes );
 		RocMdrResult result( state.getCurrentIndices( ), auc, pValue );
 
 		results->push_back( result );
@@ -63,14 +89,12 @@ runSingle(unsigned int start,
 }
 
 void
-runParallell(unsigned int start,
+RocMdrBatch::runParallell(unsigned int start,
 			 unsigned int end,
 			 RecursionState &state,
-			 Filter *filter,
-		   	 PhenotypeMapping &phenotypes,
-		   	 std::vector<RocMdrResult> *results,
-		   	 unsigned int numThreads)
+		   	 std::vector<RocMdrResult> *results)
 {
+	unsigned int numThreads = getNumThreads( );
 	unsigned int snpsPerThread = ( end - start + 1 ) / numThreads;
 
 	std::vector< std::vector<RocMdrResult> > threadResults( numThreads );
@@ -89,19 +113,14 @@ runParallell(unsigned int start,
 		}
 
 		CppThread::Thread *thread = CppThread::ThreadFactory::getInstance( )->createThread( );
-		CppThread::Functor *f = new CppThread::Functorf6<
-												unsigned int,
-												unsigned int,
-												RecursionState,
-												Filter *,
-												PhenotypeMapping &,
-												std::vector<RocMdrResult> *>( runSingle,
-																			  threadStart,
-																			  threadEnd,
-																			  state,
-																			  filter,
-																			  phenotypes,
-																			  &threadResults[ i ] );
+		CppThread::Functor *f = CppThread::bind( &RocMdrBatch::runSingle,
+												 this,
+												 threadStart,
+												 threadEnd,
+												 state,
+												 &threadResults[ i ]
+												 );
+
 		thread->start( f );
 		threads.push_back( thread );
 	}
@@ -122,29 +141,27 @@ runParallell(unsigned int start,
 
 void
 RocMdrBatch::runRocMdrRecursive(RecursionState &state,
-		   	   	   	   	   	    ColumnData<unsigned char> &snps,
-		   	   	   	   	   	    PhenotypeMapping &phenotypes,
 		   	   	   	   	   	    std::vector<RocMdrResult> *results)
 {
 	if( state.done( ) )
 	{
 		NullFilter filter;
-		if( getNumThreads( ) <= 1 || snps.size( ) < getNumThreads( ) )
+		if( getNumThreads( ) <= 1 || m_snps.size( ) < getNumThreads( ) )
 		{
-			runSingle( state.nextIndex( ), snps.size( ), state, &filter, phenotypes, results );
+			runSingle( state.nextIndex( ), m_snps.size( ), state, results );
 		}
 		else
 		{
-			runParallell( state.nextIndex( ), snps.size( ), state, &filter, phenotypes, results, getNumThreads( ) );
+			runParallell( state.nextIndex( ), m_snps.size( ), state, results );
 		}
 	}
 	else
 	{
-		for(unsigned int i = state.nextIndex( ); i < snps.size( ); i++)
+		for(unsigned int i = state.nextIndex( ); i < m_snps.size( ); i++)
 		{
 			state.push( i );
 
-			runRocMdrRecursive( state, snps, phenotypes, results );
+			runRocMdrRecursive( state, results );
 
 			state.pop( );
 		}
@@ -152,14 +169,12 @@ RocMdrBatch::runRocMdrRecursive(RecursionState &state,
 }
 
 std::vector<RocMdrResult>
-RocMdrBatch::run(unsigned int interactionOrder,
-					  ColumnData<unsigned char> snps,
-					  PhenotypeMapping phenotypes)
+RocMdrBatch::run(unsigned int interactionOrder)
 {
 	std::vector<RocMdrResult> results;
 
-	RecursionState state( interactionOrder, snps );
-	runRocMdrRecursive( state, snps, phenotypes, &results );
+	RecursionState state( interactionOrder, m_snps );
+	runRocMdrRecursive( state, &results );
 
 	return results;
 }

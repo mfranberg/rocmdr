@@ -43,8 +43,8 @@ public:
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
 
-		RocMdrBatch batch;
-		std::vector<RocMdrResult> results = batch.run( 1, snps, phenotypes );
+		RocMdrBatch batch( snps, phenotypes );
+		std::vector<RocMdrResult> results = batch.run( 1 );
 
 		TS_ASSERT_EQUALS( results.size( ), snps.size( ) );
 	}
@@ -57,8 +57,8 @@ public:
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
 
-		RocMdrBatch batch;
-		std::vector<RocMdrResult> results = batch.run( 2, snps, phenotypes );
+		RocMdrBatch batch( snps, phenotypes );
+		std::vector<RocMdrResult> results = batch.run( 2 );
 
 		TS_ASSERT_EQUALS( results.size( ), snps.size( ) * ( snps.size( ) - 1) / 2 );
 		for(unsigned int i = 0; i < results.size( ); i++)
@@ -76,11 +76,11 @@ public:
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
 
-		RocMdrBatch batch;
-		std::vector<RocMdrResult> results = batch.run( 2, snps, phenotypes );
+		RocMdrBatch batch( snps, phenotypes );
+		std::vector<RocMdrResult> results = batch.run( 2 );
 
 		batch.setNumThreads( 2 );
-		std::vector<RocMdrResult> resultsThread = batch.run( 2, snps, phenotypes );
+		std::vector<RocMdrResult> resultsThread = batch.run( 2 );
 		TS_ASSERT_EQUALS( results.size( ), resultsThread.size( ) );
 
 		std::sort( results.begin( ), results.end( ) );

@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	ColumnData<unsigned char> snps = plinkIo.getSnps( );
 	PhenotypeMapping phenotypes( plinkIo.getPhenotypes( ) );
 
-	RocMdrBatch batch;
+	RocMdrBatch batch( snps, phenotypes );
 	if( argsInfo.restrict_file_given )
 	{
 		std::vector<unsigned int> restrictIndices = readRestrictIndices( argsInfo.restrict_file_arg, plinkIo );
@@ -113,12 +113,12 @@ int main(int argc, char **argv)
 			exit( EXIT_FAILURE );
 		}
 
-		batch = RocMdrRestrictedBatch( restrictIndices );
+		batch = RocMdrRestrictedBatch( snps, phenotypes, restrictIndices );
 	}
 
 	std::vector<RocMdrResult> results;
 	batch.setNumThreads( argsInfo.num_threads_arg );
-	results = batch.run( argsInfo.interaction_order_arg, snps, phenotypes );
+	results = batch.run( argsInfo.interaction_order_arg );
 
     printPValues( plinkIo, results );
 
