@@ -38,7 +38,7 @@ public:
 	 *
 	 * @return The p-value for the given auc under the null hypothesis.
 	 */
-	float getPValue(float auc, ColumnData<unsigned char> data, const PhenotypeMapping &phenotypes);
+	float getPValue(float auc, ColumnData<unsigned char> &data, const PhenotypeMapping &phenotypes);
 
 private:
 	/**

@@ -21,7 +21,7 @@ NullInteraction::NullInteraction(unsigned int numIters)
 
 
 float
-NullInteraction::getPValue(float auc, ColumnData<unsigned char> data, const PhenotypeMapping &phenotypes)
+NullInteraction::getPValue(float auc, ColumnData<unsigned char> &data, const PhenotypeMapping &phenotypes)
 {
 	std::vector<float> simulatedAuc;
 

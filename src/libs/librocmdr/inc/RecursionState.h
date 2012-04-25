@@ -111,7 +111,7 @@ private:
 	/**
 	 * Set of SNPs associated with the recursion state.
 	 */
-	ColumnData<unsigned char> m_snps;
+	ColumnData<unsigned char> &m_snps;
 
 	/**
 	 * The SNPs currently in the state.
