@@ -13,6 +13,6 @@ if( CXXTEST_FOUND )
         get_filename_component( TEST_NAME ${TEST_PATH} NAME_WE )
 
         cxxtest_add_test( ${TEST_NAME} "${TEST_NAME}.cpp" ${TEST_PATH} )
-        target_link_libraries( ${TEST_NAME} librocmdr libcxxtest libcsv libcppthread )
+        target_link_libraries( ${TEST_NAME} librocmdr libcxxtest libcsv libcppthread ${PTHREADS_LIBRARIES} )
     endforeach( TEST_PATH )
 endif( )
