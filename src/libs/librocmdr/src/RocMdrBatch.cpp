@@ -4,7 +4,6 @@
  *  Created on: Feb 16, 2012
  *      Author: fmattias
  */
-#include <NullFilter.h>
 #include <RocMdrAnalysis.h>
 
 #include <bind.hpp>
@@ -145,7 +144,6 @@ RocMdrBatch::runRocMdrRecursive(RecursionState &state,
 {
 	if( state.done( ) )
 	{
-		NullFilter filter;
 		if( getNumThreads( ) <= 1 || m_snps.size( ) < getNumThreads( ) )
 		{
 			runSingle( state.nextIndex( ), m_snps.size( ), state, results );
@@ -173,6 +171,7 @@ RocMdrBatch::run(unsigned int interactionOrder)
 {
 	std::vector<RocMdrResult> results;
 
+	setFilter( NULL );
 	RecursionState state( interactionOrder, m_snps );
 	runRocMdrRecursive( state, &results );
 
