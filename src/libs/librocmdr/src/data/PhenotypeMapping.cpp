@@ -44,6 +44,9 @@ PhenotypeMapping::operator=(const PhenotypeMapping &other)
 	if( this != &other )
 	{
 		m_phenotypes.clear( );
+		m_positive.clear( );
+		m_negative.clear( );
+
 		m_phenotypes.assign( other.m_phenotypes.begin( ), other.m_phenotypes.end( ) );
 		m_positive.assign( other.m_positive.begin( ), other.m_positive.end( ) );
 		m_negative.assign( other.m_negative.begin( ), other.m_negative.end( ) );
