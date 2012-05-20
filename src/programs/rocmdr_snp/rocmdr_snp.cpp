@@ -60,7 +60,7 @@ pairsToIndices(const std::vector< std::pair<std::string, std::string> > &pairs, 
 	{
 		std::pair<std::string, std::string> locusPair = pairs[ i ];
 
-		if( locusMap.count( locusPair.first ) <= 0 &&
+		if( locusMap.count( locusPair.first ) <= 0 ||
 			locusMap.count( locusPair.second ) <= 0 )
 		{
 			continue;
@@ -112,11 +112,13 @@ readRestrictIndices(const char *restrictPath, PlinkIo &plinkIo)
  * Outputs the AUC and P-value for each result, and the loci
  * that was involved in the result.
  *
+ * @param outputStream Where to print the results.
+ * @param plinkIo The plink file that is used to find the rs-number of each loci.
  * @param results List of results form a RocMdr analysis.
  */
-void printPValues(PlinkIo &plinkIo, const std::vector<RocMdrResult> &results)
+void printPValues(FILE *outputStream, PlinkIo &plinkIo, const std::vector<RocMdrResult> &results)
 {
-	printf( "Loci\tAUC\tP-value\n" );
+	fprintf( outputStream, "Loci\tAUC\tP-value\n" );
 
 	for(unsigned int i = 0; i < results.size( ); i++)
 	{
@@ -124,9 +126,9 @@ void printPValues(PlinkIo &plinkIo, const std::vector<RocMdrResult> &results)
 		const std::vector<unsigned int> &loci = result.getLoci( );
 		for(unsigned int k = 0; k < loci.size( ); k++)
 		{
-			printf( "%s ", plinkIo.getLocus( loci[ k ] ).c_str( ) );
+			fprintf( outputStream, "%s ", plinkIo.getLocus( loci[ k ] ).c_str( ) );
 		}
-		printf( "\t%f\t%E\n", result.getAuc( ), result.getPValue( ) );
+		fprintf( outputStream, "\t%f\t%E\n", result.getAuc( ), result.getPValue( ) );
 	}
 }
 
@@ -190,9 +192,17 @@ int main(int argc, char **argv)
 	std::vector<RocMdrResult> results;
 	results = batch->run( argsInfo.interaction_order_arg );
 
-    printPValues( plinkIo, results );
+	FILE *outputStream = stdout;
+	FILE *outputFile = fopen( argsInfo.output_file_arg, "w" );
+	if( outputFile != NULL )
+	{
+		outputStream = outputFile;
+	}
+
+    printPValues( outputStream, plinkIo, results );
 
     delete batch;
+    fclose( outputFile );
     cmdline_parser_free( &argsInfo );
 
     return 0;
