@@ -6,15 +6,20 @@ version "1.0"
 
 purpose "Performs a k-wise rocmdr analysis."
 
-usage "rocmdr: [OPTIONS] snps phenotype"
+usage "rocmdr: [OPTIONS] snps"
 
 section "Arguments"
 	text "snps    Plink file containing the genotypes."
-	text "phenotype    is an n x 1 vector of case/control information.\n"
+
+section "Modes"
+	defmode "restrict" modedesc="In this mode one set of SNPs are tested for interaction against all others."
+	defmode "pairs" modedesc="In this mode a specific set of pairs are tested for interaction."
+	modeoption "restrict-file" r "List of SNPs that the analysis is restricted to." string typestr="filename" mode="restrict" optional
+	modeoption "pair-file" p "Only test pairs in thist list." string typestr="filename" mode="pairs" optional
 
 section "Parameters"
 	option "interaction-order" k "Interaction order." int default="1" optional
-	option "restrict-file" r "List of SNPs that the analysis is restricted to." string typestr="filename" optional
+	option "num-simulations" s "The number of simulations to do in each interaction test." int default="100" optional
 	option "num-threads" j "Number of threads to use." int default="1" optional
 	option "output-file" f "Saves the output to a file instead." string typestr="filename" optional
 	option "verbose" v "Outputs extra information during run." flag off

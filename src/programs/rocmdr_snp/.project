@@ -3,8 +3,6 @@
 	<name>rocmdr_snp</name>
 	<comment></comment>
 	<projects>
-		<project>libcsv</project>
-		<project>librocmdr</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

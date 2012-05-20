@@ -24,14 +24,16 @@
 							<tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug.33798470" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug.1730256586" name="MacOS X C++ Linker" superClass="cdt.managedbuild.tool.macosx.cpp.linker.macosx.exe.debug">
 								<option id="macosx.cpp.link.option.paths.224174572" name="Library search path (-L)" superClass="macosx.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/usr/local/lib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcppthread/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librocmdr/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/local/lib"/>
 								</option>
 								<option id="macosx.cpp.link.option.libs.1704023493" name="Libraries (-l)" superClass="macosx.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="plinkio"/>
 									<listOptionValue builtIn="false" value="csv"/>
+									<listOptionValue builtIn="false" value="cppthread"/>
+									<listOptionValue builtIn="false" value="plinkio"/>
 									<listOptionValue builtIn="false" value="rocmdr"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.macosx.cpp.linker.input.1293812253" superClass="cdt.managedbuild.tool.macosx.cpp.linker.input">
@@ -43,7 +45,6 @@
 								<option id="gnu.both.asm.option.include.paths.1223168205" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librocmdr}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1990028757" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -52,8 +53,9 @@
 								<option id="gnu.cpp.compilermacosx.exe.debug.option.optimization.level.1010324561" name="Optimization Level" superClass="gnu.cpp.compilermacosx.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level.1169899794" name="Debug Level" superClass="gnu.cpp.compiler.macosx.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.1403713856" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librocmdr/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/dense_hashmap}&quot;"/>
@@ -67,7 +69,6 @@
 								<option id="gnu.c.compiler.option.include.paths.568185631" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/libcsv}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/librocmdr}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.709002839" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -79,13 +80,7 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
-				<externalSettings containerId="librocmdr;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
-					<externalSetting>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/librocmdr"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/librocmdr/Debug"/>
-						<entry flags="RESOLVED" kind="libraryFile" name="librocmdr"/>
-					</externalSetting>
-				</externalSettings>
+				<externalSettings containerId="librocmdr;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier"/>
 				<externalSettings containerId="libcsv;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/"/>

@@ -39,19 +39,6 @@ public:
 	virtual ~RocMdrBatch();
 
 	/**
-	 * Sets the number of threads to use.
-	 */
-	void setNumThreads(unsigned int numThreads);
-
-	/**
-	 * Returns the number of threads to use when
-	 * executing the batch.
-	 *
-	 * @return the number of threads to use.
-	 */
-	unsigned int getNumThreads();
-
-	/**
 	 * Returns the snps associated with this batch.
 	 *
 	 * @return the snps associated with this batch.
@@ -142,7 +129,7 @@ private:
 	PhenotypeMapping m_phenotypes;
 
 	/**
-	 * A filter that will be used in the last level
+	 * A filter that will be used at the last level
 	 * of the recursion.
 	 */
 	Filter *m_filter;

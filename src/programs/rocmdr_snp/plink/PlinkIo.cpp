@@ -94,6 +94,24 @@ PlinkIo::getLocus(unsigned int i)
 	}
 }
 
+std::map<std::string, unsigned int>
+PlinkIo::getLocusMap()
+{
+	std::map<std::string, unsigned int> locusMap;
+	if( !m_isOpen )
+	{
+		return locusMap;
+	}
+
+	for(unsigned int i = 0; i < pio_num_loci( &m_plinkFile ); i++ )
+	{
+		struct pio_locus_t *locus = pio_get_locus( &m_plinkFile, i );
+		locusMap[ std::string( locus->name ) ] = i ;
+	}
+
+	return locusMap;
+}
+
 void
 PlinkIo::close()
 {

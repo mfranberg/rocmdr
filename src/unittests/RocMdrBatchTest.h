@@ -8,6 +8,7 @@
 #ifndef ROCMDRANALYSISTEST_H_
 #define ROCMDRANALYSISTEST_H_
 
+#include <Config.h>
 #include <data/ColumnData.h>
 #include <data/PhenotypeMapping.h>
 #include <RocMdrBatch.h>
@@ -79,7 +80,7 @@ public:
 		RocMdrBatch batch( snps, phenotypes );
 		std::vector<RocMdrResult> results = batch.run( 2 );
 
-		batch.setNumThreads( 2 );
+		Config::getConfig( )->setNumThreads( 2 );
 		std::vector<RocMdrResult> resultsThread = batch.run( 2 );
 		TS_ASSERT_EQUALS( results.size( ), resultsThread.size( ) );
 

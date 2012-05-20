@@ -12,5 +12,5 @@ include_directories( ${CPPTHREAD_INCLUDE_DIR} )
 
 run_ggo( GGO_SRC rocmdr_snp.ggo )
 
-add_executable( rocmdr_snp rocmdr_snp.cpp plink/PlinkIo.cpp RestrictReader.cpp ${GGO_SRC} )
+add_executable( rocmdr_snp rocmdr_snp.cpp plink/PlinkIo.cpp RestrictReader.cpp PairReader.cpp ${GGO_SRC} )
 target_link_libraries( rocmdr_snp librocmdr libcppthread ${PLINKIO_LIBRARIES} ${PTHREADS_LIBRARIES} )

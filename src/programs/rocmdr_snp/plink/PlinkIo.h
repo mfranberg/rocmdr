@@ -8,6 +8,7 @@
 #ifndef PLINKIO_H_
 #define PLINKIO_H_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -53,6 +54,17 @@ public:
 	 * returned by getSnps.
 	 */
 	std::string getLocus(unsigned int i);
+
+	/**
+	 * Returns a map that maps each locus name to
+	 * an index in the SNP matrix. This will be the
+	 * index of the column that contains the SNP in
+	 * the ColumnData object returned by getSnps().
+	 *
+	 * @return a map that maps each locus name to
+	 * an index in the SNP matrix.
+	 */
+	std::map<std::string, unsigned int> getLocusMap();
 
 	/**
 	 * Closes the file if it is open, otherwise

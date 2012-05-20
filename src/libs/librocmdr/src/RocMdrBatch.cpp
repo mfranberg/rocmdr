@@ -4,6 +4,7 @@
  *  Created on: Feb 16, 2012
  *      Author: fmattias
  */
+#include <Config.h>
 #include <RocMdrAnalysis.h>
 
 #include <bind.hpp>
@@ -15,8 +16,7 @@
 RocMdrBatch::RocMdrBatch(ColumnData<unsigned char> snps, PhenotypeMapping phenotypes)
 :	m_snps( snps ),
  	m_phenotypes( phenotypes ),
- 	m_filter( NULL ),
-	m_numThreads( 1 )
+ 	m_filter( NULL )
 {
 
 }
@@ -29,22 +29,16 @@ RocMdrBatch::~RocMdrBatch()
 	}
 }
 
-void
-RocMdrBatch::setNumThreads(unsigned int numThreads)
-{
-	m_numThreads = numThreads;
-}
-
-unsigned int
-RocMdrBatch::getNumThreads()
-{
-	return m_numThreads;
-}
-
 ColumnData<unsigned char>
 RocMdrBatch::getSnps()
 {
 	return m_snps;
+}
+
+PhenotypeMapping
+RocMdrBatch::getPhenotypes()
+{
+	return m_phenotypes;
 }
 
 void
@@ -64,7 +58,7 @@ RocMdrBatch::runSingle(unsigned int start,
 		  	  	  	   RecursionState state,
 		  	  	  	   std::vector<RocMdrResult> *results)
 {
-	NullInteraction nullSimulator( 100 );
+	NullInteraction nullSimulator( Config::getConfig( )->getNumSimulations( ) );
 
 	for(unsigned int i = start; i < end; i++)
 	{
@@ -93,7 +87,7 @@ RocMdrBatch::runParallell(unsigned int start,
 			 RecursionState &state,
 		   	 std::vector<RocMdrResult> *results)
 {
-	unsigned int numThreads = getNumThreads( );
+	unsigned int numThreads = Config::getConfig( )->getNumThreads( );
 	unsigned int snpsPerThread = ( end - start + 1 ) / numThreads;
 
 	std::vector< std::vector<RocMdrResult> > threadResults( numThreads );
@@ -144,7 +138,7 @@ RocMdrBatch::runRocMdrRecursive(RecursionState &state,
 {
 	if( state.done( ) )
 	{
-		if( getNumThreads( ) <= 1 || m_snps.size( ) < getNumThreads( ) )
+		if( Config::getConfig( )->getNumThreads( ) <= 1 || m_snps.size( ) < Config::getConfig( )->getNumThreads( ) )
 		{
 			runSingle( state.nextIndex( ), m_snps.size( ), state, results );
 		}

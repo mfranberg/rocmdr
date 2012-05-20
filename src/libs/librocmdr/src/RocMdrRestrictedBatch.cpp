@@ -4,6 +4,7 @@
  *  Created on: Feb 16, 2012
  *      Author: fmattias
  */
+#include <Config.h>
 #include <RestrictFilter.h>
 #include <RocMdrBatch.h>
 #include <RocMdrAnalysis.h>
@@ -23,7 +24,7 @@ RocMdrRestrictedBatch::runRocMdrRecursive(RecursionState &state,
 {
 	if( state.done( ) )
 	{
-		if( getNumThreads( ) <= 1 || getSnps( ).size( ) < getNumThreads( ) )
+		if( Config::getConfig( )->getNumThreads( ) <= 1 || getSnps( ).size( ) < Config::getConfig( )->getNumThreads( ) )
 		{
 			runSingle( 0, getSnps( ).size( ), state, results );
 		}
