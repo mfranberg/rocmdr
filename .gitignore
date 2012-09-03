@@ -20,3 +20,4 @@ src/programs/rocmdr_snp/rocmdr_snp_ggo.*
 *.snm
 *.synctex.gz
 *.toc
+src/build*
