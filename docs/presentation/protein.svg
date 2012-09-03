@@ -13,8 +13,11 @@
    height="1052.3622047"
    id="svg11936"
    version="1.1"
-   inkscape:version="0.48.2 r9819"
-   sodipodi:docname="New document 58">
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="protein.svg"
+   inkscape:export-filename="/Users/fmattias/projects/rocmdr/docs/presentation/protein.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs11938">
     <marker
@@ -58,9 +61,9 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1329"
-     inkscape:window-height="1029"
-     inkscape:window-x="380"
-     inkscape:window-y="80"
+     inkscape:window-height="856"
+     inkscape:window-x="97"
+     inkscape:window-y="52"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata11941">
@@ -70,7 +73,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -150,14 +153,14 @@
          sodipodi:linespacing="125%"
          id="text13300-7"
          y="11.535872"
-         x="403.02017"
+         x="283.02017"
          style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-size:22px"
            y="11.535872"
-           x="403.02017"
+           x="283.02017"
            id="tspan13302-7"
-           sodipodi:role="line">A has a mutation</tspan></text>
+           sodipodi:role="line">A and B have incompatible alleles</tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -253,7 +256,8 @@
              sodipodi:role="line"
              id="tspan13493"
              x="429.70428"
-             y="472.3002">0.1</tspan></text>
+             y="472.3002"
+             style="font-weight:normal;-inkscape-font-specification:Sans">0.1</tspan></text>
         <text
            xml:space="preserve"
            style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -367,5 +371,62 @@
            id="tspan13616"
            sodipodi:role="line">Locus B</tspan></text>
     </g>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="65.714302"
+       y="143.79074"
+       id="text3045"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3047"
+         x="65.714302"
+         y="143.79074"
+         style="font-size:24px">A</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="170"
+       y="156.6479"
+       id="text3072"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3074"
+         x="170"
+         y="156.6479">B</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:319.00000572%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="645.71429"
+       y="468.07648"
+       id="text3076"
+       sodipodi:linespacing="319.00001%"><tspan
+         sodipodi:role="line"
+         id="tspan3078"
+         x="645.71429"
+         y="468.07648"
+         style="font-size:24px;line-height:319.00000572%">AA</tspan><tspan
+         sodipodi:role="line"
+         x="645.71429"
+         y="544.63647"
+         id="tspan3080"
+         style="font-size:24px;line-height:319.00000572%">Aa</tspan><tspan
+         sodipodi:role="line"
+         x="645.71429"
+         y="621.19647"
+         id="tspan3082"
+         style="font-size:24px;line-height:319.00000572%">aa</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="437.14288"
+       y="678.07648"
+       id="text3084"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3086"
+         x="437.14288"
+         y="678.07648"
+         style="font-size:24px">BB     Bb     bb</tspan></text>
   </g>
 </svg>
