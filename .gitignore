@@ -10,3 +10,8 @@ src/build/
 src/unittests/runner.cpp
 src/programs/rocmdr/cmdline.h
 src/programs/rocmdr/cmdline.c
+results/*
+docs/presentation/*.png
+docs/presentation/*.eps
+src/programs/rocmdr_snp/rocmdr_snp_ggo.c
+src/programs/rocmdr_snp/rocmdr_snp_ggo.*
