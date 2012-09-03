@@ -5,13 +5,14 @@
  *      Author: fmattias
  */
 
-#ifndef ROCMDRANALYSISTEST_H_
-#define ROCMDRANALYSISTEST_H_
+#ifndef INTERACTIONBATCHTEST_H_
+#define INTERACTIONBATCHTEST_H_
 
 #include <Config.h>
 #include <data/ColumnData.h>
 #include <data/PhenotypeMapping.h>
-#include <RocMdrBatch.h>
+#include <iter/AllIterator.h>
+#include <InteractionBatch.h>
 #include <RocMdrResult.h>
 
 #include <algorithm>
@@ -28,10 +29,10 @@ static const unsigned int NUM_SNPS = 11;
  */
 static const unsigned int NUM_SAMPLES = 20;
 
-class RocMdrBatchTest : public CxxTest::TestSuite
+class InteractionBatchTest : public CxxTest::TestSuite
 {
 public:
-	RocMdrBatchTest()
+	InteractionBatchTest()
 	{
 		srandom( 5215 );
 	}
@@ -43,9 +44,11 @@ public:
 
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
+		PhenotypeMapping mapping( phenotypes );
 
-		RocMdrBatch batch( snps, phenotypes );
-		std::vector<RocMdrResult> results = batch.run( 1 );
+		InteractionBatch batch;
+		AllIterator iter( snps, mapping, 1 );
+		std::vector<RocMdrResult> results = batch.run( &iter, 1 );
 
 		TS_ASSERT_EQUALS( results.size( ), snps.size( ) );
 	}
@@ -57,9 +60,11 @@ public:
 
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
+		PhenotypeMapping mapping( phenotypes );
 
-		RocMdrBatch batch( snps, phenotypes );
-		std::vector<RocMdrResult> results = batch.run( 2 );
+		InteractionBatch batch;
+		AllIterator iter( snps, mapping, 2 );
+		std::vector<RocMdrResult> results = batch.run( &iter, 1 );
 
 		TS_ASSERT_EQUALS( results.size( ), snps.size( ) * ( snps.size( ) - 1) / 2 );
 		for(unsigned int i = 0; i < results.size( ); i++)
@@ -76,12 +81,13 @@ public:
 
 		std::vector<bool> phenotypes;
 		randomPhenotypes( &phenotypes, NUM_SAMPLES );
+		PhenotypeMapping mapping( phenotypes );
 
-		RocMdrBatch batch( snps, phenotypes );
-		std::vector<RocMdrResult> results = batch.run( 2 );
+		InteractionBatch batch;
+		AllIterator iter( snps, mapping, 2 );
+		std::vector<RocMdrResult> results = batch.run( &iter, 1 );
+		std::vector<RocMdrResult> resultsThread = batch.run( &iter, 2 );
 
-		Config::getConfig( )->setNumThreads( 2 );
-		std::vector<RocMdrResult> resultsThread = batch.run( 2 );
 		TS_ASSERT_EQUALS( results.size( ), resultsThread.size( ) );
 
 		std::sort( results.begin( ), results.end( ) );
@@ -117,4 +123,4 @@ public:
 	}
 };
 
-#endif /* ROCMDRANALYSISTEST_H_ */
+#endif /* INTERACTIONBATCHTEST_H_ */

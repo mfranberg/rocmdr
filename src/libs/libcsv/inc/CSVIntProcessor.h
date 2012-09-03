@@ -44,7 +44,7 @@ public:
 	 *
 	 * @return the read columns.
 	 */
-	std::vector< std::vector< int > > getColumnData();
+	std::vector< std::vector< char > > getColumnData();
 
 	/**
 	 * Returns the column header.
@@ -72,12 +72,12 @@ private:
 	/**
 	 * The values that we have read.
 	 */
-	std::vector< std::vector< int > > m_columns;
+	std::vector< std::vector< char > > m_columns;
 
 	/**
 	 * Values int the current row.
 	 */
-	std::vector< int > m_currentRow;
+	std::vector< char > m_currentRow;
 };
 
 #endif /* CSVINTPROCESSOR_H_ */

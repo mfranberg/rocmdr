@@ -20,7 +20,7 @@
  * @param path The path to the file to read from.
  * @param data The read data will be stored here.
  */
-void readToColumnData(const char *path, ColumnData<unsigned int> *data);
+void readToColumnData(const char *path, ColumnData<unsigned char> *data);
 
 /**
  * Reads phenotypes from a file to a vector. It assumes that it is

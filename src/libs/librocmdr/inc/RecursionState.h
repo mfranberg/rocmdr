@@ -48,20 +48,6 @@ public:
 	void push(unsigned int index);
 
 	/**
-	 * Pushes a SNP to the recursion state, but in addition
-	 * it stores a virtual index, that is used instead of index
-	 * when calling lastIndex. This can be useful when you have
-	 * a partial list of SNPs that you want to loop over, but want
-	 * to access them from the global list of all snps.
-	 *
-	 * @param index Index to a column in the SNPs.
-	 * @param virutalIndex Virtual index that will be returned instead
-	 *                     of index by nextIndex.
-	 *
-	 */
-	void push(unsigned int index, unsigned int virtualIndex);
-
-	/**
 	 * Pops the last SNP from the recursion state.
 	 */
 	void pop();
@@ -87,13 +73,20 @@ public:
 	std::vector<unsigned int> &getCurrentIndices();
 
 	/**
-	 * Returns the successor of the last pushed index. If a virtual index
-	 * exist then its successor will be returned instead. If nothing is
-	 * pushed, 0 will be returned.
+	 * Returns the last index if there is one, otherwise
+	 * -1 is returned.
 	 *
-	 * @return the successor index.
+	 * @return The last index if there is one, otherwise
+	 * -1 is returned.
 	 */
-	unsigned int nextIndex();
+	unsigned int getLastIndex();
+
+	/**
+	 * Returns the current depth of the recursion state.
+	 *
+	 * @return the current depth of the recursion state.
+	 */
+	unsigned int depth();
 
 	/**
 	 * Returns true if the recursion is at its max depth.
@@ -122,11 +115,6 @@ private:
 	 * Current set of indices.
 	 */
 	std::vector<unsigned int> m_curIndex;
-
-	/**
-	 * Last index that was added.
-	 */
-	std::vector<unsigned int> m_lastIndex;
 };
 
 #endif /* RECURSIONSTATE_H_ */

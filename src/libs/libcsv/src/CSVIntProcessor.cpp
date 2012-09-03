@@ -29,7 +29,7 @@ CSVIntProcessor::onField(const std::string &field)
 	int numScannedElements = std::sscanf( field.c_str( ), "%d%n", &fieldAsInt, &charactersUsed );
 	if( numScannedElements == 1 && charactersUsed == (int) field.size( ) )
 	{
-		m_currentRow.push_back( fieldAsInt );
+		m_currentRow.push_back( (char) fieldAsInt );
 	}
 	else
 	{
@@ -69,7 +69,7 @@ CSVIntProcessor::onRowEnd()
 	m_currentRow.clear( );
 }
 
-std::vector< std::vector< int > >
+std::vector< std::vector< char > >
 CSVIntProcessor::getColumnData()
 {
 	return m_columns;

@@ -12,7 +12,7 @@
 #include "parsing.h"
 
 void
-readToColumnData(const char *path, ColumnData<unsigned int> *data)
+readToColumnData(const char *path, ColumnData<unsigned char> *data)
 {
 	CSVReader parser;
 	CSVIntProcessor processor;
@@ -22,11 +22,11 @@ readToColumnData(const char *path, ColumnData<unsigned int> *data)
 		exit( 0 );
 	}
 
-	std::vector< std::vector< int > > columns = processor.getColumnData( );
+	std::vector< std::vector< char > > columns = processor.getColumnData( );
 	for(unsigned int i = 0; i < columns.size( ); i++)
 	{
-		std::vector<int> currentColumn = columns[ i ];
-		std::vector<unsigned int> unsignedColumn( currentColumn.begin( ), currentColumn.end( ) );
+		std::vector<char> currentColumn = columns[ i ];
+		std::vector<unsigned char> unsignedColumn( currentColumn.begin( ), currentColumn.end( ) );
 		data->addColumn( unsignedColumn );
 	}
 }
@@ -42,7 +42,7 @@ readPhenotypes(const char *path, std::vector<bool> *phenotypes)
 		exit( 0 );
 	}
 
-	std::vector< int > phenotypesAsInt = processor.getColumnData( )[ 0 ];
+	std::vector< char > phenotypesAsInt = processor.getColumnData( )[ 0 ];
 	for(unsigned int i = 0; i < phenotypesAsInt.size( ); i++)
 	{
 		phenotypes->push_back( phenotypesAsInt[ i ] == 1 );

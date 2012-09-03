@@ -17,8 +17,7 @@ RecursionState::RecursionState(const RecursionState &other)
 : m_maxDepth( other.m_maxDepth ),
   m_snps( other.m_snps ),
   m_curSnps( other.m_curSnps ),
-  m_curIndex( other.m_curIndex ),
-  m_lastIndex( other.m_lastIndex )
+  m_curIndex( other.m_curIndex )
 {
 
 }
@@ -32,7 +31,6 @@ RecursionState::operator=(const RecursionState &other)
 		m_snps = other.m_snps;
 		m_curSnps = other.m_curSnps;
 		m_curIndex.assign( other.m_curIndex.begin( ), other.m_curIndex.end( ) );
-		m_lastIndex.assign( other.m_lastIndex.begin( ), other.m_lastIndex.end( ) );
 	}
 
 	return *this;
@@ -43,14 +41,6 @@ RecursionState::push(unsigned int index)
 {
 	m_curSnps.addColumn( m_snps.getColumn( index ) );
 	m_curIndex.push_back( index );
-	m_lastIndex.push_back( index );
-}
-
-void
-RecursionState::push(unsigned int index, unsigned int virtualIndex)
-{
-	push( index );
-	m_lastIndex.back( ) = virtualIndex;
 }
 
 void
@@ -58,7 +48,6 @@ RecursionState::pop()
 {
 	m_curSnps.removeColumnLast( );
 	m_curIndex.pop_back( );
-	m_lastIndex.pop_back( );
 }
 
 ColumnData<unsigned char> &
@@ -74,16 +63,22 @@ RecursionState::getCurrentIndices()
 }
 
 unsigned int
-RecursionState::nextIndex()
+RecursionState::getLastIndex()
 {
-	if( m_lastIndex.size( ) == 0 )
+	if( m_curIndex.size( ) == 0 )
 	{
-		return 0;
+		return -1;
 	}
 	else
 	{
-		return m_lastIndex.back( ) + 1;
+		return m_curIndex.back( );
 	}
+}
+
+unsigned int
+RecursionState::depth()
+{
+	return m_curSnps.size( );
 }
 
 bool

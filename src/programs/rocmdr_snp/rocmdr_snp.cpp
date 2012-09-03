@@ -6,11 +6,11 @@
 
 #include <data/ColumnData.h>
 #include <Config.h>
-#include <RocMdrAnalysis.h>
 #include <RocMdrResult.h>
-#include <RocMdrBatch.h>
-#include <RocMdrPairBatch.h>
-#include <RocMdrRestrictedBatch.h>
+#include <InteractionBatch.h>
+#include <iter/AllIterator.h>
+#include <iter/PairIterator.h>
+#include <iter/RestrictedIterator.h>
 
 #include "RestrictReader.h"
 #include "PairReader.h"
@@ -132,6 +132,40 @@ void printPValues(FILE *outputStream, PlinkIo &plinkIo, const std::vector<RocMdr
 	}
 }
 
+InteractionIterator *
+createInteractionIterator(gengetopt_args_info argsInfo, ColumnData<unsigned char> &snps, PhenotypeMapping &phenotypes, PlinkIo &plinkIo)
+{
+	unsigned int interactionOrder = argsInfo.interaction_order_arg;
+
+	if( argsInfo.restrict_file_given )
+	{
+		std::vector<unsigned int> restrictIndices = readRestrictIndices( argsInfo.restrict_file_arg, plinkIo );
+		if( restrictIndices.size( ) == 0 )
+		{
+			printf( "rocmdr: no restrict set found in %s\n", argsInfo.restrict_file_arg );
+			exit( EXIT_FAILURE );
+		}
+
+		return new RestrictedIterator( snps, phenotypes, restrictIndices, interactionOrder );
+	}
+	else if( argsInfo.pair_file_given )
+	{
+		std::vector< std::pair<unsigned int, unsigned int> > pairIndices =
+				readPairIndices( argsInfo.pair_file_arg, plinkIo );
+		if( pairIndices.size( ) == 0 )
+		{
+			printf( "rocmdr: no pairs found in %s\n", argsInfo.pair_file_arg );
+			exit( EXIT_FAILURE );
+		}
+
+		return new PairIterator( snps, phenotypes, pairIndices );
+	}
+	else
+	{
+		return new AllIterator( snps, phenotypes, interactionOrder );
+	}
+}
+
 /**
  * Computes a ROCAUC for each SNP together with the
  * environmental factors. And prints the AUC and
@@ -152,7 +186,6 @@ int main(int argc, char **argv)
 		exit( EXIT_FAILURE );
 	}
 
-	Config::getConfig( )->setNumThreads( argsInfo.num_threads_arg );
 	Config::getConfig( )->setNumSimulations( argsInfo.num_simulations_arg );
 
 	// Read SNPs
@@ -160,37 +193,11 @@ int main(int argc, char **argv)
 	ColumnData<unsigned char> snps = plinkIo.getSnps( );
 	PhenotypeMapping phenotypes( plinkIo.getPhenotypes( ) );
 
-	RocMdrBatch *batch = NULL;
-	if( argsInfo.restrict_file_given )
-	{
-		std::vector<unsigned int> restrictIndices = readRestrictIndices( argsInfo.restrict_file_arg, plinkIo );
-		if( restrictIndices.size( ) == 0 )
-		{
-			printf( "rocmdr: no restrict set found in %s\n", argsInfo.restrict_file_arg );
-			exit( EXIT_FAILURE );
-		}
+	InteractionIterator *iter = createInteractionIterator( argsInfo, snps, phenotypes, plinkIo );
 
-		batch = new RocMdrRestrictedBatch( snps, phenotypes, restrictIndices );
-	}
-	else if( argsInfo.pair_file_given )
-	{
-		std::vector< std::pair<unsigned int, unsigned int> > pairIndices =
-				readPairIndices( argsInfo.pair_file_arg, plinkIo );
-		if( pairIndices.size( ) == 0 )
-		{
-			printf( "rocmdr: no pairs found in %s\n", argsInfo.pair_file_arg );
-			exit( EXIT_FAILURE );
-		}
-
-		batch = new RocMdrPairBatch( snps, phenotypes, pairIndices );
-	}
-	else
-	{
-		batch = new RocMdrBatch( snps, phenotypes );
-	}
-
-	std::vector<RocMdrResult> results;
-	results = batch->run( argsInfo.interaction_order_arg );
+	InteractionBatch batch;
+	std::vector<RocMdrResult> results = batch.run( iter, argsInfo.num_threads_arg );
+	delete iter;
 
 	FILE *outputStream = stdout;
 	FILE *outputFile = fopen( argsInfo.output_file_arg, "w" );
@@ -201,7 +208,6 @@ int main(int argc, char **argv)
 
     printPValues( outputStream, plinkIo, results );
 
-    delete batch;
     fclose( outputFile );
     cmdline_parser_free( &argsInfo );
 

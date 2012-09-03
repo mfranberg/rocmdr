@@ -17,16 +17,16 @@
  *Ê@return A vector containing the counts of the distinct values
  *Ê        of each column.
  */
-std::vector<unsigned int>
-computeColumnRanges(ColumnData<unsigned int> &factors)
+std::vector<unsigned char>
+computeColumnRanges(ColumnData<unsigned char> &factors)
 {
-	std::vector<unsigned int> columnRanges;
+	std::vector<unsigned char> columnRanges;
 
 	columnRanges.push_back( 3 ); // For SNP
 	for(unsigned int i = 0; i < factors.size( ); i++)
 	{
-		const std::vector< unsigned int > column = factors.getColumn( i );
-		unsigned int maxElement = *std::max_element( column.begin( ), column.end( ) ) + 1;
+		const std::vector< unsigned char > column = factors.getColumn( i );
+		unsigned char maxElement = *std::max_element( column.begin( ), column.end( ) ) + 1;
 		columnRanges.push_back( maxElement );
 	}
 
@@ -68,11 +68,11 @@ int main(int argc, char **argv)
 	}
 
 	// Read SNPs
-	ColumnData<unsigned int> genotypes;
+	ColumnData<unsigned char> genotypes;
 	readToColumnData( argsInfo.inputs[ 0 ], &genotypes );
 
 	// Read environmental factors
-	ColumnData<unsigned int> factors;
+	ColumnData<unsigned char> factors;
 	readToColumnData( argsInfo.inputs[ 1 ], &factors );
 
 	// Read phenotypes
@@ -86,8 +86,8 @@ int main(int argc, char **argv)
 	{
 		factors.addColumn( genotypes.getColumn( i ) );
 
-		//RocMdrAnalysis mdrAnalyzer( factors, phenotypeMapping );
-		//pValues.push_back( mdrAnalyzer.getPValue( ) );
+		RocMdrAnalysis mdrAnalyzer( factors, phenotypeMapping );
+		pValues.push_back( mdrAnalyzer.getPValue( ) );
 
 		factors.removeColumnLast( );
 	}
