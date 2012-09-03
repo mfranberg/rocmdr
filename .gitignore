@@ -15,3 +15,8 @@ docs/presentation/*.png
 docs/presentation/*.eps
 src/programs/rocmdr_snp/rocmdr_snp_ggo.c
 src/programs/rocmdr_snp/rocmdr_snp_ggo.*
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
