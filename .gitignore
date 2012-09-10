@@ -21,3 +21,4 @@ src/programs/rocmdr_snp/rocmdr_snp_ggo.*
 *.synctex.gz
 *.toc
 src/build*
+*.pyc
