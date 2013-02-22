@@ -32,7 +32,7 @@ read_snps = function(plink_path)
     sink( )
     
     # Make 2 major allele, for some reason it is usually coded as such.
-    snps = 2 - as.numeric( snps )
+    snps = 2 - as( snps, "numeric" )
     
     return( snps )
 }
