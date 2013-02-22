@@ -26,35 +26,30 @@ def probability(prob_string):
     return prob_value
 
 ##
-# Converts a maf to the p-parameter in the Hardy-Weinberg
-# model.
-#
-# @param maf Desired minor allele frequency.
-#
-# @return Corresponding p-parameter in the HW model.
-#
-def maf_to_p(maf):
-    return 1 - sqrt( maf )
-
-##
 # Computes the joint Hardy-Weinberg model represented
 # as a vector.
 #
 # @param maf Desired minor allele frequncy.
+# @param ld The probability Pr[x2 = i| x1 = i].
 #
 # @return Joint probability model for the Hardy-Weinberg
 #         model.
 #
-def joint_maf(maf):
-    maf1 = maf_to_p( maf[ 0 ] )
-    maf2 = maf_to_p( maf[ 1 ] )
+def joint_maf(maf, ld):
+    maf1 = maf[ 0 ]
+    maf2 = maf[ 1 ]
 
-    p = [ maf1**2, 2 * maf1 * ( 1 - maf1 ), ( 1 - maf1 )**2 ]
-    q = [ maf2**2, 2 * maf2 * ( 1 - maf2 ), ( 1 - maf2 )**2 ]
+    p = [ ( 1 - maf[ 0 ] )**2, 2 * maf[ 0 ] * ( 1 - maf[ 0 ] ), ( maf[ 0 ] )**2 ]
+    q = [ ( 1 - maf[ 1 ] )**2, 2 * maf[ 1 ] * ( 1 - maf[ 1 ] ), ( maf[ 1 ] )**2 ]
 
-    joint_prob = [ p[ 0 ] * q[ 0 ], p[ 0 ] * q[ 1 ], p[ 0 ] * q[ 2 ],
+    if not ld:
+        return   [ p[ 0 ] * q[ 0 ], p[ 0 ] * q[ 1 ], p[ 0 ] * q[ 2 ],
                    p[ 1 ] * q[ 0 ], p[ 1 ] * q[ 1 ], p[ 1 ] * q[ 2 ],
                    p[ 2 ] * q[ 0 ], p[ 2 ] * q[ 1 ], p[ 2 ] * q[ 2 ] ]
+    else:
+        return   [ p[ 0 ] * ld, p[ 0 ] * ( 1 - ld ) / 2.0, p[ 0 ] * ( 1 - ld ) / 2.0,
+                   p[ 1 ] * ( 1 - ld ) / 2.0, p[ 1 ] * ld, p[ 1 ] * ( 1 - ld ) / 2.0,
+                   p[ 2 ] * ( 1 - ld ) / 2.0, p[ 2 ] * ( 1 - ld ) / 2.0, p[ 2 ] * ld ]
 
     return joint_prob
 
@@ -64,13 +59,14 @@ def joint_maf(maf):
 #
 # @param penetrance Penetrance of each genotype.
 # @param maf Desired minor allele frequncy.
+# @param ld The probability Pr[x2 = i| x1 = i].
 #
 # @return A tuple containing first the probabilities of 
 #         x1, x2 | D = 1, and second the probabilityies
 #         of x1, x2 | D = 2 represented as vectors.
 #
-def joint_snp(penetrance, maf):
-    joint_hw = np.array( joint_maf( maf ) )
+def joint_snp(penetrance, maf, ld):
+    joint_hw = np.array( joint_maf( maf, ld ) )
 
     penetrance = np.array( penetrance )
 
@@ -134,7 +130,7 @@ def generate_genotypes(joint_prob, num_samples):
 # @param pair_file PairFile object.
 #
 def write_genotypes(args, tped_file, tfam_file, pair_file):
-    sick_prob, healthy_prob = joint_snp( args.model, args.maf )
+    sick_prob, healthy_prob = joint_snp( args.model, args.maf, args.ld )
 
     for i in range( 0, args.npairs * 2, 2 ):
         snp1_sick, snp2_sick = generate_genotypes( sick_prob, args.ncases )
@@ -178,6 +174,7 @@ if __name__ == "__main__":
     arg_parser.add_argument( '--ncases', metavar='ncases', type=int, help='Number of cases.', required = True )
     arg_parser.add_argument( '--ncontrols', metavar='ncontrols', type=int, help='Number of controls.', required = True )
     arg_parser.add_argument( '--npairs', metavar='npairs', type=int, help='Number of interaction pairs', required = True )
+    arg_parser.add_argument( '--ld', metavar='ld', type=probability, help='Strength of LD (ignores second maf).' )
     
     arg_parser.add_argument( '--out', metavar='output_file', help='Output .tped file.', required = True )
 
