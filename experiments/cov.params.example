@@ -1,0 +1,4 @@
+--snpbeta 0.3 0.3 0.8 --covariate sex,0.2,binomial,1,0.5 age,0.2,normal,55,7
+--snpbeta 0.3 0.3 0.9 --covariate sex,0.2,binomial,1,0.5 age,0.2,normal,55,7
+--snpbeta 0.3 0.3 1.0 --covariate sex,0.2,binomial,1,0.5 age,0.2,normal,55,7
+--snpbeta 0.3 0.3 1.1 --covariate sex,0.2,binomial,1,0.5 age,0.2,normal,55,7
