@@ -66,23 +66,17 @@ template <class T>
 std::vector<T> shuffleColumn(std::vector<T> data, const PhenotypeMapping &phenotypes, RandomInt &rand)
 {
 	std::vector<unsigned int> positive = phenotypes.getPositiveIndices( );
-	std::random_shuffle( positive.begin( ), positive.end( ), rand );
-
-	for(unsigned int i = 1; i < positive.size( ); i++)
+	for(unsigned int i = positive.size( ) - 1; i > 0; i--)
 	{
-		unsigned int first = positive[ i ];
-		unsigned int second = positive[ i - 1 ];
-		std::swap( data[ first ], data[ second ] );
+		unsigned int j = rand( i );
+		std::swap( data[ positive[ i ] ], data[ positive[ j ] ] );
 	}
 
 	std::vector<unsigned int> negative = phenotypes.getNegativeIndices( );
-	std::random_shuffle( negative.begin( ), negative.end( ), rand );
-
-	for(unsigned int i = 1; i < negative.size( ); i++)
+	for(unsigned int i = negative.size( ) - 1; i > 0; i--)
 	{
-		unsigned int first = negative[ i ];
-		unsigned int second = negative[ i - 1 ];
-		std::swap( data[ first ], data[ second ] );
+		unsigned int j = rand( i );
+		std::swap( data[ negative[ i ] ], data[ negative[ j ] ] );
 	}
 
 	return data;

@@ -1,6 +1,6 @@
 sink( "/dev/null" ) # Make sure package do not output anything to stdout
 
-library( snpMatrix, quietly = T )
+library( snpStats, quietly = T )
 library( lmtest, quietly = T )
 library( multicore, quietly = T )
 
@@ -31,8 +31,7 @@ read_snps = function(plink_path)
                        plink_path_list[ 3 ] )
     sink( )
     
-    # Make 2 major allele, for some reason it is usually coded as such.
-    snps = 2 - as( snps, "numeric" )
+    snps = 2 - as( snps$genotypes, "numeric" )
     
     return( snps )
 }

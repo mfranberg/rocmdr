@@ -1,17 +1,30 @@
-sink( "/dev/null" )
+#sink( "/dev/null" )
 
-library( snpMatrix, quietly = T )
+library( snpStats, quietly = T )
 library( lmtest, quietly = T )
 library( multicore, quietly = T )
 
-sink( )
+#sink( )
 
 argv = commandArgs( trailingOnly = TRUE )
-if ( length( argv ) != 2 )
+if( length( argv ) != 2 && length( argv ) != 3 )
 {
     message( "glm_interaction: Wrong number of arguments." )
-    message( "Usage: glm_interaction pairs plink_file" )
+    message( "Usage: glm_interaction pairs plink_file [covariates]" )
     quit( )
+}
+
+pair_file = ""
+plink_file = ""
+cov_file = ""
+if( length( argv ) >= 2 )
+{
+    pair_file = argv[ 1 ]
+    plink_file = argv[ 2 ]
+}
+if( length( argv ) >= 3 )
+{
+    cov_file = argv[ 3 ]
 }
 
 ##
@@ -31,8 +44,7 @@ read_snps = function(plink_path)
                        plink_path_list[ 3 ] )
     sink( )
     
-    # Make 2 major allele, for some reason it is usually coded as such.
-    snps = 2 - as( snps, "numeric" )
+    snps = 2 - as( snps$genotypes, "numeric" )
     
     return( snps )
 }
@@ -67,22 +79,35 @@ compute_pvalue = function(pair)
     snp1 = snps[ ,pair[ 1 ] ]
     snp2 = snps[ ,pair[ 2 ] ]
     
-    model_data = data.frame( snp1, snp2, phenotype )
-    
-    result = glm( phenotype ~ snp1 + snp2 + snp1 * snp2,
-                  family = binomial( "logit" ), data = model_data )
+    result = NULL
+    if( is.null( covariates ) )
+    {
+        model_data = data.frame( snp1, snp2, phenotype )
+        result = glm( phenotype ~ snp1 + snp2 + snp1 * snp2,
+                      family = binomial( "logit" ), data = model_data )
+    }
+    else
+    {
+        model_data = data.frame( snp1, snp2, phenotype, covariates )
+        result = glm( phenotype ~ snp1 + snp2 + snp1 * snp2 + .,
+                      family = binomial( "logit" ), data = model_data )
+    }
     stat = summary( result )
     
-    return( stat$coefficients[ 4, 4 ] )
+    return( stat$coefficients[ "snp1:snp2", 4 ] )
 }
 
-pair_file = argv[ 1 ]
-pairs = read.table( pair_file, header = F )
-list_pairs = as.list( as.data.frame( t(pairs), stringsAsFactors = F ) )
+pairs = read.table( pair_file, header = FALSE )
+list_pairs = as.list( as.data.frame( t(pairs), stringsAsFactors = FALSE ) )
 
-plink_file = argv[ 2 ]
 snps = read_snps( plink_file )
 phenotype = read_phenotypes( plink_file )
+
+covariates = NULL
+if( cov_file != "" )
+{
+    covariates = read.table( cov_file, header = T )
+}
 
 pvalues = unlist( mclapply( list_pairs, compute_pvalue, mc.cores = 2 ) )
 

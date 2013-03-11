@@ -9,7 +9,7 @@ class TFamFile:
     #
     def __init__(self, path):
         self.file = open( path, "w" )
-        self.iid = 0
+        self.iid = 1
 
     ##
     # Writes a sample with the given phenotypes. FID
