@@ -161,7 +161,9 @@ def write_genotypes(args, ped_file, map_file, pair_file, cov_file):
             continue
 
         ped_file.write( [ to_allele( snp1 ), to_allele( snp2 ) ], phenotype + 1 )
-        cov_file.write( covariates )
+
+        if covariates:
+            cov_file.write( covariates )
     
     pair_file.write( 0, 1 )
     map_file.write( )
@@ -178,14 +180,19 @@ def write_data(args):
     ped_file = PedFile( path + ".ped" )
     map_file = MapFile( path + ".map" )
     pair_file = PairFile( path + ".pair" )
-    cov_file = CovFile( path + ".cov", [ c.name for c in args.covariate ] )
+
+    cov_file = None
+    if args.covariate:
+        cov_file = CovFile( path + ".cov", [ c.name for c in args.covariate ] )
     
     write_genotypes( args, ped_file, map_file, pair_file, cov_file )
 
     ped_file.close( )
     map_file.close( )
     pair_file.close( )
-    cov_file.close( )
+
+    if args.covariate:
+        cov_file.close( )
     
     status = os.system( "plink --file {0} --make-bed --out {1} > /dev/null".format( path, path ) )
     if status == -1:
@@ -199,7 +206,7 @@ if __name__ == "__main__":
     arg_parser.add_argument( '--ncases', metavar='ncases', type=int, help='Number of cases.', required = True )
     arg_parser.add_argument( '--ncontrols', metavar='ncontrols', type=int, help='Number of controls.', required = True )
     arg_parser.add_argument( '--snpbeta', metavar='snpbeta', nargs=3, type=float, help='Beta for snp1, snp2 and snp1xsnp2', required = True )
-    arg_parser.add_argument( '--covariate', metavar='covariate', nargs='+', type=parse_cov, help='List of name,beta,distribution,param1,param2. Valid distributions are "normal" or "binomial".', required = True ) 
+    arg_parser.add_argument( '--covariate', metavar='covariate', nargs='+', type=parse_cov, help='List of name,beta,distribution,param1,param2. Valid distributions are "normal" or "binomial".', default = [] ) 
     arg_parser.add_argument( '--out', metavar='output_file', help='Output prefix for .bim, .bed, .fam, .pairs and .cov.', required = True )
 
     args = arg_parser.parse_args( )
