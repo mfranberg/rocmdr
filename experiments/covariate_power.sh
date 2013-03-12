@@ -54,36 +54,40 @@ maf="$maf1 $maf2"
 # Generate data and run methods for each model
 threshold=`echo 0.05/$ninteractions | bc -l`
 # Increased for every set of parameters in a model
-i=1
+i=0
 
 # Output file
 output_file="$output_dir/model.out"
 cat /dev/null > $output_file
+generate_flags=""
 while read model_params; do
     cat /dev/null > "$output_dir/glm.out"
     cat /dev/null > "$output_dir/ll.out"
     cat /dev/null > "$output_dir/bayesic.out"
 
+    with_cov=$(( i % 2 ))
+    if [[ $with_cov -eq 0 ]]; 
+    then
+        cov_file=""
+        generate_flags=$model_params
+    else
+        cov_file="$generated_path.cov"
+        generate_flags="$generate_flags $model_params"
+    fi
+
     for pair in `seq 1 $npairs`;
     do
-        python $generate_path $model_params --maf $maf --ncases $ncases --ncontrols $ncontrols --out $generated_path
-
-        #$rocmdr_path -j 2 -s 1 -p "$generated_path.pair" $generated_path > "$output_dir/rocmdr_model$i.out"
-
-        cov_file=""
-        if [[ -e "$generated_path.cov" ]];
-        then
-            cov_file="$generated_path.cov"
-        fi;
+        python $generate_path $generate_flags --maf $maf --ncases $ncases --ncontrols $ncontrols --out $generated_path
 
         Rscript $glm_path "$generated_path.pair" $generated_path $cov_file | awk 'NF == 3'  >> "$output_dir/glm.out"
         Rscript $ll_path "$generated_path.pair" $generated_path | awk 'NF == 3' >> "$output_dir/ll.out"
         python $bayesic_path -p "$generated_path.pair" -n $ninteractions $generated_path | awk 'NF == 3' >> "$output_dir/bayesic.out"
     done
-    
-    cat "$output_dir/glm.out" | $calculate_power "Logistic" $i 2 le $threshold >> $output_file
-    cat "$output_dir/ll.out" | $calculate_power "Log-linear" $i 2 le $threshold >> $output_file
-    cat "$output_dir/bayesic.out" | $calculate_power "Bayesic" $i 2 ge 0.95 >> $output_file
+  
+    effect=$((i / 2)) 
+    cat "$output_dir/glm.out" | $calculate_power "Logistic" $effect 2 le $threshold | awk -v w=$with_cov '{ print $0 "\t" w}' >> $output_file
+    cat "$output_dir/ll.out" | $calculate_power "Log-linear" $effect 2 le $threshold | awk -v w=$with_cov '{ print $0 "\t" w}' >> $output_file
+    cat "$output_dir/bayesic.out" | $calculate_power "Bayesic" $effect 2 ge 0.95 | awk -v w=$with_cov '{ print $0 "\t" w}' >> $output_file
 
     let "i=$i+1"
 done < $model_file
