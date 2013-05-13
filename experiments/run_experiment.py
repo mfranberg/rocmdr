@@ -155,7 +155,7 @@ class NoCovariateStrategy(ExperimentStrategy):
 
             method_power = program.calculate_power( params, self.method_handler )
             for method_name, power_data in method_power.iteritems( ):
-                power, lower, uppwer = power_data
+                power, lower, upper = power_data
                 line = "{0}\t{1}\t{2}\t{3}\t{4}\n".format( method_name, param_id, power, lower, upper )
                 power_file.write( line )
 
