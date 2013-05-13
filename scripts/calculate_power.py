@@ -1,4 +1,5 @@
 import sys
+from math import sqrt
 
 if len( sys.argv ) != 6:
     print( "Usage: calculate_power.py method model column <ge|gt|lt|le> threshold" )
@@ -15,7 +16,7 @@ op = op_map.get( sys.argv[ 4 ], None )
 threshold = float( sys.argv[ 5 ] )
 
 if not op:
-    print( "apply_threshold.py: error: No such operator '{0}'.".format( sys.argv[ 4 ] ) );
+    print( "calculate_power.py: error: No such operator '{0}'.".format( sys.argv[ 4 ] ) );
     exit( 1 )
 
 num_significant = 0
@@ -34,4 +35,6 @@ for line in sys.stdin:
     total += 1
 
 power = num_significant / float( total )
-print( "{0}\t{1}\t{2}".format( method, model, power ) )
+err = 1.96 * sqrt( ( 1.0 / total ) * power * ( 1 - power ) )
+
+print( "{0}\t{1}\t{2}\t{3}\t{4}".format( method, model, power, power - err, power + err ) )
