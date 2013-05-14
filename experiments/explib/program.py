@@ -56,7 +56,7 @@ class LogisticMethod:
                 data_prefix ]
 
         if include_covariates:
-            cmd.append( data_prefix + ".pair" )
+            cmd.append( data_prefix + ".cov" )
         subprocess.call( cmd, stdout = output_file )
 
     def compute_power(self, output_path, num_tests):
@@ -79,12 +79,13 @@ def get_methods( ):
 # @param params General experiment parameters.
 # @param plink_path Prefix path to the plink, .pair and .cov files.
 # @param method_handler Object that handles method output.
+# @param include_covariates Determines whether to include covariates or not.
 #
-def run_methods(params, plink_path, method_handler):
+def run_methods(params, plink_path, method_handler, include_covariates = False):
     method_list = get_methods( )
     for method in method_list:
         method_output_file = method_handler.get_output_file( method.name )
-        method.run( plink_path, params.num_tests, method_output_file )
+        method.run( plink_path, params.num_tests, method_output_file, include_covariates )
 
 ##
 # Calculates power for all the output files found

@@ -195,7 +195,7 @@ class CovariateStrategy(ExperimentStrategy):
                                              covariates,
                                              plink_path )
 
-                program.run_methods( params, plink_path, self.method_handler )
+                program.run_methods( params, plink_path, self.method_handler, with_cov )
             
             self.method_handler.reset_files( )
             method_power = program.calculate_power( params, self.method_handler )
