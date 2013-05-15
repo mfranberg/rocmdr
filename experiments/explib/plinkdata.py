@@ -33,13 +33,12 @@ def generate_data(params, model_params, ld, output_prefix):
 # @param cov Covariate parameters.
 # @param output_prefix Path prefix of the plink file to generate.
 #
-def generate_suf_cov_data(params, model_params, cov, output_prefix):
+def generate_sufficient_cov_data(params, model_params, cov, output_prefix):
     script_path = "../tools/generate_ped/generate_sufficient_covariate_ped.py"
     cmd = [ "python", script_path,
             "--maf", str( params.maf[ 0 ] ), str( params.maf[ 1 ] ),
             "--ncases", str( params.sample_size[ 1 ] ),
             "--ncontrols", str( params.sample_size[ 0 ] ),
-            "--npairs", str( params.num_pairs ),
             "--out", output_prefix ]
     
     cmd.append( "--model" )

@@ -122,7 +122,8 @@ class GeneticExperiment:
     #
     def create_strategies(self, method_handler):
         return { "genetic" : NoCovariateStrategy( method_handler ),
-                 "covariate" : CovariateStrategy( method_handler ) }
+                 "covariate" : CovariateStrategy( method_handler ),
+                 "sufficient" : SufficientCovariateStrategy( method_handler ) }
 
     ##
     # Runs the experiments defined by the given json array of
@@ -249,6 +250,60 @@ class CovariateStrategy(ExperimentStrategy):
                          experiment[ 'ylabel' ],
                          params,
                          plot_path )
+
+class SufficientCovariateStrategy(ExperimentStrategy):
+    def __init__(self, method_handler):
+        self.method_handler = method_handler
+
+    ##
+    # Calculate power with or without covariates.
+    #
+    def run_experiment(self, params, experiment, plink_path, power_file, with_cov):
+        postfix = "with_cov"
+        if not with_cov:
+            postfix = "without_cov"
+
+        for model_id, model in enumerate( experiment[ 'models' ] ): 
+            covariates = model[ 'covariates' ]
+            if not with_cov:
+                covariates = None
+
+
+            params = updated_params( params, model )
+            self.method_handler.start_experiment( experiment[ 'name' ], model_id, postfix )
+            for i in range( params.num_pairs ):
+                plinkdata.generate_sufficient_cov_data( params,
+                                             model[ 'params' ],
+                                             covariates,
+                                             plink_path )
+
+                program.run_methods( params, plink_path, self.method_handler, with_cov )
+            
+            xvalue = model.get( 'xvalue', None )
+            if not xvalue:
+                xvalue = model_id
+
+            self.method_handler.reset_files( )
+            method_power = program.calculate_power( params, self.method_handler )
+            for method_name, power_data in method_power.iteritems( ):
+                power, lower, upper = power_data
+                line = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format( method_name, xvalue, power, lower, upper, int( with_cov ) )
+                power_file.write( line )
+
+
+    def calculate_power(self, params, experiment, plink_path, power_file):
+        self.run_experiment( params, experiment, plink_path, power_file, True )
+        self.run_experiment( params, experiment, plink_path, power_file, False )
+    
+    def plot_power(self, params, experiment, power_path, plot_path):
+        plot.plot_cov_power( power_path,
+                         experiment[ 'title' ],
+                         experiment[ 'xlabel' ],
+                         experiment[ 'ylabel' ],
+                         params,
+                         plot_path )
+
+
 
 ##
 # Argparse json file loader.
