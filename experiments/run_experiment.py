@@ -34,6 +34,27 @@ class ExperimentParams:
         #
         self.num_tests = num_tests
 
+def updated_params(params, json_object):
+    new_params = ExperimentParams( params.maf, params.sample_size, params.num_pairs, params.num_tests )
+    
+    maf = json_object.get( "maf", None )
+    if maf:
+        new_params.maf = maf
+
+    sample_size = json_object.get( "sample_size", None )
+    if sample_size:
+        new_params.sample_size = sample_size
+
+    num_pairs = json_object.get( "num_pairs", None )
+    if num_pairs:
+        new_params.num_pairs = num_pairs
+
+    num_tests = json_object.get( "num_tests", None )
+    if num_tests:
+        new_params.num_tests = num_tests
+
+    return new_params
+
 ##
 # Main class for simulating data for a set of parameter
 # combinations.
@@ -144,19 +165,25 @@ class NoCovariateStrategy(ExperimentStrategy):
 
     def calculate_power(self, params, experiment, plink_path, power_file):
         ld = experiment.get( "ld", 0.0 )
-        for param_id, model in enumerate( experiment[ 'models' ] ):
+        for model_id, model in enumerate( experiment[ 'models' ] ):
+            params = updated_params( params, model )
+
             plinkdata.generate_data( params,
                                      model[ 'params' ],
                                      ld, plink_path )
 
-            self.method_handler.start_experiment( experiment[ 'name' ], param_id )
+            self.method_handler.start_experiment( experiment[ 'name' ], model_id )
             program.run_methods( params, plink_path, self.method_handler )
             self.method_handler.reset_files( )
+
+            xvalue = model.get( 'xvalue', None )
+            if not xvalue:
+                xvalue = model_id
 
             method_power = program.calculate_power( params, self.method_handler )
             for method_name, power_data in method_power.iteritems( ):
                 power, lower, upper = power_data
-                line = "{0}\t{1}\t{2}\t{3}\t{4}\n".format( method_name, param_id, power, lower, upper )
+                line = "{0}\t{1}\t{2}\t{3}\t{4}\n".format( method_name, xvalue, power, lower, upper )
                 power_file.write( line )
 
     def plot_power(self, params, experiment, power_path, plot_path):
@@ -183,12 +210,14 @@ class CovariateStrategy(ExperimentStrategy):
         if not with_cov:
             postfix = "without_cov"
 
-        for param_id, model in enumerate( experiment[ 'models' ] ): 
+        for model_id, model in enumerate( experiment[ 'models' ] ): 
             covariates = model[ 'covariates' ]
             if not with_cov:
                 covariates = None
 
-            self.method_handler.start_experiment( experiment[ 'name' ], param_id, postfix )
+
+            params = updated_params( params, model )
+            self.method_handler.start_experiment( experiment[ 'name' ], model_id, postfix )
             for i in range( params.num_pairs ):
                 plinkdata.generate_cov_data( params,
                                              model[ 'snpbeta' ],
@@ -197,11 +226,15 @@ class CovariateStrategy(ExperimentStrategy):
 
                 program.run_methods( params, plink_path, self.method_handler, with_cov )
             
+            xvalue = model.get( 'xvalue', None )
+            if not xvalue:
+                xvalue = model_id
+
             self.method_handler.reset_files( )
             method_power = program.calculate_power( params, self.method_handler )
             for method_name, power_data in method_power.iteritems( ):
                 power, lower, upper = power_data
-                line = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format( method_name, param_id, power, lower, upper, int( with_cov ) )
+                line = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format( method_name, xvalue, power, lower, upper, int( with_cov ) )
                 power_file.write( line )
 
 

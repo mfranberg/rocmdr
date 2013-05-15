@@ -20,9 +20,9 @@ class MethodHandler:
         self.experiment_name = ""
 
         ##
-        # Id of the model effect size.
+        # Id of the model.
         #
-        self.param_id = ""
+        self.model_id = ""
 
         ##
         # Additional postfix for method output filenames.
@@ -38,12 +38,12 @@ class MethodHandler:
     # Resets the object so that it can handle a new set of methods.
     #
     # @param experiment_name Name of the experiment.
-    # @param param_id Id of the model effect size.
+    # @param model_id Id of the model.
     # @param postfix Additional postfix for method output filenames.
     #
-    def start_experiment(self, experiment_name, param_id, postfix = ""):
+    def start_experiment(self, experiment_name, model_id, postfix = ""):
         self.experiment_name = experiment_name
-        self.param_id = param_id
+        self.model_id = model_id
         self.postfix = "_" + postfix
         self.method_files = dict( )
  
@@ -67,7 +67,7 @@ class MethodHandler:
         corrected_experiment_name = util.sanitize_name( self.experiment_name )
         output_file = "{0}_{1}_effect{2}{3}.out".format( corrected_experiment_name,
                                                       corrected_method_name,
-                                                      self.param_id,
+                                                      self.model_id,
                                                       self.postfix )
         return os.path.join( self.base_dir, output_file )
 
